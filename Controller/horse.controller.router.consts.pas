@@ -33,6 +33,15 @@ type
     Listenning   = 'Horse backend atendendo as requisicoes em %s';
  end;
 
+ TClientsParams = class
+   const
+    id     = 'id';
+    nome   = 'nome';
+    time   = 'time';
+    bool   = 'verdadeiro';
+    number = 'number';
+ end;
+
 implementation
 
 end.

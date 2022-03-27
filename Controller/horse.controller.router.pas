@@ -12,6 +12,9 @@ uses
  horse.service.params.types;
 
 type
+  {Encapsula a classe THorse para expor apenas as propiedades e métodos úteis
+   para este service. Isso permite também modificar a classe que encapsula os
+   protocolos http/https sem impacto nas demais classes deste service.}
   THorseRouter = class(TInterfacedObject, IHorseRouter)
     private
       FServiceParams: TBackendParams;
@@ -65,6 +68,7 @@ begin
  Result := self;
  THorse.Use(Jhonson);
  THorse.Listen(ServiceParams.Porta);
+ THorse
 end;
 
 function THorseRouter.RegisterEndpoints: IHorseRouter;
