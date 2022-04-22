@@ -14,7 +14,7 @@ uses
   end;
 
   //Abstrai os parâmetros de acesso a dados do serviço local "Service NFe"
-  TModelDatabaseParams = record
+  TModelDataParams = record
     ConnectionString: string;
     ConnectionTimeout: integer;
     CommandTimeout: integer;
@@ -37,7 +37,7 @@ uses
     ServiceName: string;
     CriticalLogs: string;
     ModelLogsFile: string;
-    Data: TModelDatabaseParams;
+    Data: TModelDataParams;
     Task: TModelTaskParams;
  //   Companies: TDataInfo;
     Timeouts: TModelTimeouts;

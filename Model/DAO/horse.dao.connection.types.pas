@@ -1,4 +1,4 @@
-unit horse.dao.connection.ado.types;
+unit horse.dao.connection.types;
 
 interface
 
@@ -7,11 +7,11 @@ uses
 
 type
   //Define a assinatura do evento de tratamento de erro usando ADO
-  TOnADOErrorEvent = procedure(ErrorInfo: string; ErrorSource: string;
+  TOnDBErrorEvent = procedure(ErrorInfo: string; ErrorSource: string;
     Command: string) of object;
 
   //Define a assinatura do evento de tratamento de erro de conectividade usando ADO
-  TOnADOConnectErrorEvent = procedure(E: Exception; ErrorInfo: string; ErrorSource: string) of object;
+  TOnConnectErrorEvent = procedure(E: Exception; ErrorInfo: string; ErrorSource: string) of object;
 
   //Define a assinatura do evento de execução de um script usando ADO
   TOnExecuteCommandEvent = procedure(Command: string; Script: TStringList; E: Exception) of object;

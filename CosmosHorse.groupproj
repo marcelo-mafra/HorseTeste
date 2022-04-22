@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{0EA02075-C3C9-4A4D-BA58-F5D2E8B67B04}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="alunosConsole.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="focosConsole.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="alunosConsole">
+        <MSBuild Projects="alunosConsole.dproj"/>
+    </Target>
+    <Target Name="alunosConsole:Clean">
+        <MSBuild Projects="alunosConsole.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="alunosConsole:Make">
+        <MSBuild Projects="alunosConsole.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="focosConsole">
+        <MSBuild Projects="focosConsole.dproj"/>
+    </Target>
+    <Target Name="focosConsole:Clean">
+        <MSBuild Projects="focosConsole.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="focosConsole:Make">
+        <MSBuild Projects="focosConsole.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="alunosConsole;focosConsole"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="alunosConsole:Clean;focosConsole:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="alunosConsole:Make;focosConsole:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

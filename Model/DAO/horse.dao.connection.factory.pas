@@ -6,8 +6,8 @@ uses
   System.Classes,
   //horse units
   horse.dao.connection.interfaces,
-  horse.dao.connection.ado.types,
-  horse.dao.connection.ado,
+  horse.dao.connection.types,
+  horse.dao.connection.firedac,
   horse.model.params.types;
 
 type
@@ -16,36 +16,43 @@ type
     service. Nunca*** se deve usar qualquer*** componente descendente de TCustomConnection }
     TConnectionFactory = class
       public
-       class function New(const DataParams: TModelDatabaseParams; const TimeoutsParams: TModelTimeouts): IAbstractConnection; overload;
-       class function New(const DataParams: TModelDatabaseParams; const TimeoutsParams: TModelTimeouts;
-          OnError: TOnADOErrorEvent; OnExecuteCommand: TOnExecuteCommandEvent): IAbstractConnection; overload;
+       class function New(const DataParams: TModelDataParams; const TimeoutsParams: TModelTimeouts): IAbstractConnection; overload;
+       class function New(const DataParams: TModelDataParams; const TimeoutsParams: TModelTimeouts;
+          OnError: TOnDBErrorEvent; OnExecuteCommand: TOnExecuteCommandEvent): IAbstractConnection; overload;
+       class function New(const ConnectionStr: string): IAbstractConnection; overload;
     end;
 
 implementation
 
 { TConnectionFactory }
 
-class function TConnectionFactory.New(const DataParams: TModelDatabaseParams;
-  const TimeoutsParams: TModelTimeouts; OnError: TOnADOErrorEvent;
+class function TConnectionFactory.New(const DataParams: TModelDataParams;
+  const TimeoutsParams: TModelTimeouts; OnError: TOnDBErrorEvent;
   OnExecuteCommand: TOnExecuteCommandEvent): IAbstractConnection;
 begin
   {Acessa a interface IAbstractConnection usando ADO e alguns ponteiros de eventos.
   Esses ponteiros permitem que as classes que fazem uso de IAbstractConnection
   manipulem, conforme suas necessidades, ocorrências específicas detectadas em
   operações envolvendo o database}
-  Result := THorseADOConnection.New(DataParams.ConnectionString, TimeoutsParams.ConnectionTimeout,
+  Result := TFiredacHorseConnection.New(DataParams.ConnectionString, TimeoutsParams.ConnectionTimeout,
       TimeoutsParams.CommandTimeout, OnError, OnExecuteCommand);
 end;
 
-class function TConnectionFactory.New(const DataParams: TModelDatabaseParams;
+class function TConnectionFactory.New(const DataParams: TModelDataParams;
   const TimeoutsParams: TModelTimeouts): IAbstractConnection;
 begin
   {Acessa a interface IAbstractConnection usando ADO e alguns ponteiros de eventos.
   Esses ponteiros permitem que as classes que fazem uso de IAbstractConnection
   manipulem, conforme suas necessidades, ocorrências específicas detectadas em
   operações envolvendo o database}
-  Result := THorseADOConnection.New(DataParams.ConnectionString, TimeoutsParams.ConnectionTimeout,
+  Result := TFiredacHorseConnection.New(DataParams.ConnectionString, TimeoutsParams.ConnectionTimeout,
       TimeoutsParams.CommandTimeout, nil, nil);
+end;
+
+class function TConnectionFactory.New(
+  const ConnectionStr: string): IAbstractConnection;
+begin
+  Result := TFiredacHorseConnection.New(ConnectionStr, 0, 0, nil, nil);
 end;
 
 end.

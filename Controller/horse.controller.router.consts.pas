@@ -11,6 +11,26 @@ type
      Sample   = '/sample';
      Cliente  = '/clientes/:id';
      Clientes = '/clientes';
+     Aluno    = '/alunos/:id';
+     Alunos   = '/alunos';
+     AlunosFoco    = '/alunos/focos/:id';
+     AlunosFocoGroup    = '/alunos/group/:focoid/:groupid';
+ end;
+
+ TEndPointsFocos = class
+   const
+     Foco         = '/focos/:id';
+     Focos        = '/focos';
+     FocosParent  = '/focos/parent/:id';
+     FocosRegions  = '/focos/regions/:id';
+
+ end;
+
+ TEndPointsRegions = class
+   const
+     Regions        = '/regions';
+     RegionsParent  = '/regions/:id';
+     RegionsMember  = '/regions/:id';
  end;
 
  TContentsTypes = class

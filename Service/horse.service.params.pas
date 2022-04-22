@@ -51,6 +51,7 @@ procedure THorseParams.ReadParams(var Params: TBackendParams);
 begin
  Params.Host  := Reader.ReadString(TServiceInfo.Host, TServiceInfo.URL, '');
  Params.Porta := Reader.ReadInteger(TServiceInfo.Host, TServiceInfo.Porta, 0);
+ Params.ConnectionStr := Reader.ReadString(TServiceInfo.Host, TServiceInfo.Data, '')
 end;
 
 end.

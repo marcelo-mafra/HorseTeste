@@ -8,10 +8,17 @@ uses
 type
   TServiceInfo = class
     const
-     ParamsFile = 'Params.ini';
      Host       = 'HOST';
      Porta      = 'PORTA';
      Url        = 'URL';
+     Data       = 'DATA';
+  end;
+
+  TServiceParamsFiles = class
+    const
+     Alunos      = 'alunos.ini';
+     Focos       = 'focos.ini';
+
   end;
 
 implementation
