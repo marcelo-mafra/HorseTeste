@@ -3,10 +3,13 @@
         <ProjectGuid>{0EA02075-C3C9-4A4D-BA58-F5D2E8B67B04}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
-        <Projects Include="alunosConsole.dproj">
+        <Projects Include="Frontend\cosmos.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="focosConsole.dproj">
+        <Projects Include="Backend\alunosConsole.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Backend\focosConsole.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -17,32 +20,41 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
+    <Target Name="cosmos">
+        <MSBuild Projects="Frontend\cosmos.dproj"/>
+    </Target>
+    <Target Name="cosmos:Clean">
+        <MSBuild Projects="Frontend\cosmos.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="cosmos:Make">
+        <MSBuild Projects="Frontend\cosmos.dproj" Targets="Make"/>
+    </Target>
     <Target Name="alunosConsole">
-        <MSBuild Projects="alunosConsole.dproj"/>
+        <MSBuild Projects="Backend\alunosConsole.dproj"/>
     </Target>
     <Target Name="alunosConsole:Clean">
-        <MSBuild Projects="alunosConsole.dproj" Targets="Clean"/>
+        <MSBuild Projects="Backend\alunosConsole.dproj" Targets="Clean"/>
     </Target>
     <Target Name="alunosConsole:Make">
-        <MSBuild Projects="alunosConsole.dproj" Targets="Make"/>
+        <MSBuild Projects="Backend\alunosConsole.dproj" Targets="Make"/>
     </Target>
     <Target Name="focosConsole">
-        <MSBuild Projects="focosConsole.dproj"/>
+        <MSBuild Projects="Backend\focosConsole.dproj"/>
     </Target>
     <Target Name="focosConsole:Clean">
-        <MSBuild Projects="focosConsole.dproj" Targets="Clean"/>
+        <MSBuild Projects="Backend\focosConsole.dproj" Targets="Clean"/>
     </Target>
     <Target Name="focosConsole:Make">
-        <MSBuild Projects="focosConsole.dproj" Targets="Make"/>
+        <MSBuild Projects="Backend\focosConsole.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="alunosConsole;focosConsole"/>
+        <CallTarget Targets="cosmos;alunosConsole;focosConsole"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="alunosConsole:Clean;focosConsole:Clean"/>
+        <CallTarget Targets="cosmos:Clean;alunosConsole:Clean;focosConsole:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="alunosConsole:Make;focosConsole:Make"/>
+        <CallTarget Targets="cosmos:Make;alunosConsole:Make;focosConsole:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

@@ -87,7 +87,7 @@
         <DCC_UsePackage>RESTComponents;emsclientfiredac;FireDACIBDriver;emsclient;FireDACCommon;RESTBackendComponents;soapserver;CloudService;FireDACCommonDriver;inet;FireDAC;FireDACSqliteDriver;soaprtl;soapmidas;$(DCC_UsePackage)</DCC_UsePackage>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
         <SanitizedProjectName>alunosConsole</SanitizedProjectName>
-        <DCC_UnitSearchPath>modules\.dcp;modules\.dcu;modules;modules\dataset-serialize\src;modules\horse\src;modules\horse-query\src;modules\jhonson\src;$(COSMOS_HORSE)\Controller;$(COSMOS_HORSE)\Model;$(COSMOS_HORSE)\Model\DAO;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
+        <DCC_UnitSearchPath>$(COSMOS_HORSE)\Backend\Controller;$(COSMOS_HORSE)\Backend\Model;$(COSMOS_HORSE)\Backend\Model\DAO;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <VerInfo_Locale>1046</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
         <DCC_Define>ALUNOS_SVC;FOCOS_SVC;$(DCC_Define)</DCC_Define>

@@ -4,7 +4,7 @@ interface
 
 uses
  System.Classes, System.SysUtils, Web.HTTPApp, System.JSON,
- Horse, Horse.Jhonson, Horse.Query,
+ Horse, Horse.Jhonson,
  horse.controller.router.types, horse.service.params,
  horse.service.params.consts, horse.service.params.types,
  {$IF DEFINED(ALUNOS_SVC)}
@@ -94,7 +94,6 @@ begin
  Result := self;
  THorse
     .Use(Jhonson)
-    .Use(Query)
     .AddCallback(ACallback);
 
  THorse.Listen(ServiceParams.Porta);
@@ -104,8 +103,7 @@ function THorseRouter.InitializeService: IHorseRouter;
 begin
  Result := self;
  THorse
-    .Use(Jhonson)
-    .Use(Query);
+    .Use(Jhonson);
 
  THorse.Listen(ServiceParams.Porta);
 end;
