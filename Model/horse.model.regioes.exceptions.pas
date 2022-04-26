@@ -17,6 +17,11 @@ type
     constructor Create(Info: string);
   end;
 
+  EDeleteRegion = class(ECosmosError)
+   public
+    constructor Create;
+  end;
+
 implementation
 
 { EInvalidRegionName }
@@ -35,6 +40,16 @@ begin
  inherited Create;
  self.ErrorId := TFocosErrorId.InvalidRegionParent;
  self.Message := 'A região ou subregião administrativa não está ligada a uma região-pai existente.';
+end;
+
+{ EDeleteRegion }
+
+constructor EDeleteRegion.Create;
+begin
+ inherited Create;
+ self.ErrorId := TFocosErrorId.DeleteRegion;
+ self.Message := 'A região ou subregião administrativa não pode ser excluída. ' +
+                 'A subregião ou região está vinculada a um ou mais focos.';
 end;
 
 end.

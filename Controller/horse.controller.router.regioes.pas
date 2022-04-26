@@ -18,11 +18,15 @@ type
 
    class procedure GetRegionsEndpoint(Request: THorseRequest; Response: THorseResponse;
       Next: TProc);
-   class procedure GetRegionsParentEndpoint(Request: THorseRequest; Response: THorseResponse;
+   class procedure GetRegionsMembersEndpoint(Request: THorseRequest; Response: THorseResponse;
+      Next: TProc);
+   class procedure GetRegionEndpoint(Request: THorseRequest; Response: THorseResponse;
       Next: TProc);
    class procedure PostNewRegion(Request: THorseRequest; Response: THorseResponse;
       Next: TProc);
    class procedure PutRegion(Request: THorseRequest; Response: THorseResponse;
+      Next: TProc);
+   class procedure DeleteRegion(Request: THorseRequest; Response: THorseResponse;
       Next: TProc);
    class procedure RegistrarEndpoints;
 
@@ -31,6 +35,26 @@ type
 implementation
 
 { TRegioesEndpoints }
+
+class procedure TRegioesEndpoints.DeleteRegion(Request: THorseRequest;
+  Response: THorseResponse; Next: TProc);
+begin
+ try
+   Response.Send(TModelRegioes.New(Params)
+      .DeleteRegion(Request.Params.Field('id').AsInteger).ToString)
+      .Status(THTTPStatus.NoContent);
+
+ except
+  on E: ECosmosError do
+   begin
+    Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.NotAcceptable);
+   end;
+  on E: Exception do
+   begin
+    Response.Send(E.Message).Status(THTTPStatus.InternalServerError);
+   end;
+ end;
+end;
 
 class procedure TRegioesEndpoints.GetRegionsEndpoint(Request: THorseRequest;
   Response: THorseResponse; Next: TProc);
@@ -49,7 +73,25 @@ begin
   end;
 end;
 
-class procedure TRegioesEndpoints.GetRegionsParentEndpoint(
+class procedure TRegioesEndpoints.GetRegionEndpoint(
+  Request: THorseRequest; Response: THorseResponse; Next: TProc);
+begin
+  try
+   Response.Send<TJsonObject>(TModelRegioes.New(Params)
+           .ListMember(Request.Params.Field('id').AsInteger));
+  except
+  on E: ECosmosError do
+   begin
+    Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.InternalServerError);
+   end;
+  on E: Exception do
+   begin
+    Response.Send(E.Message).Status(THTTPStatus.InternalServerError);
+   end;
+  end;
+end;
+
+class procedure TRegioesEndpoints.GetRegionsMembersEndpoint(
   Request: THorseRequest; Response: THorseResponse; Next: TProc);
 begin
   try
@@ -119,9 +161,11 @@ begin
   {$IF DEFINED(FOCOS_SVC)}
   //Endpoints do domínio REGIOES
   THorse.Routes.RegisterRoute(mtGet, TEndPointsRegions.Regions, GetRegionsEndpoint);
-  THorse.Routes.RegisterRoute(mtGet, TEndPointsRegions.RegionsParent, GetRegionsParentEndpoint);
+  THorse.Routes.RegisterRoute(mtGet, TEndPointsRegions.RegionsMember, GetRegionsMembersEndpoint);
+  THorse.Routes.RegisterRoute(mtGet, TEndPointsRegions.Region, GetRegionEndpoint);
   THorse.Routes.RegisterRoute(mtPost, TEndPointsRegions.Regions, PostNewRegion);
-  THorse.Routes.RegisterRoute(mtPut,  TEndPointsRegions.RegionsMember, PutRegion);
+  THorse.Routes.RegisterRoute(mtPut,  TEndPointsRegions.Region, PutRegion);
+  THorse.Routes.RegisterRoute(mtDelete,  TEndPointsRegions.Region, DeleteRegion);
   {$ENDIF}
 end;
 

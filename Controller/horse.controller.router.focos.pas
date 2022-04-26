@@ -15,7 +15,6 @@ type
 
  public
    class var Params: TBackendParams;
-
    class procedure GetFocoEndpoint(Request: THorseRequest; Response: THorseResponse;
       Next: TProc);
    class procedure GetFocosEndpoint(Request: THorseRequest; Response: THorseResponse;
@@ -23,6 +22,10 @@ type
    class procedure GetFocosParentEndpoint(Request: THorseRequest; Response: THorseResponse;
       Next: TProc);
    class procedure GetFocosRegionEndpoint(Request: THorseRequest; Response: THorseResponse;
+      Next: TProc);
+   class procedure PutDesativarFocoEndpoint(Request: THorseRequest; Response: THorseResponse;
+      Next: TProc);
+   class procedure PutReativarFocoEndpoint(Request: THorseRequest; Response: THorseResponse;
       Next: TProc);
    class procedure RegistrarEndpoints;
 
@@ -56,6 +59,18 @@ begin
   Response.Send<TJsonArray>(TModelFocos.New(Params).ListFocosRegion(Request.Params.Field('id').AsInteger));
 end;
 
+class procedure TFocosEndpoints.PutDesativarFocoEndpoint(Request: THorseRequest;
+  Response: THorseResponse; Next: TProc);
+begin
+ Response.Send<TJsonObject>(TModelFocos.New(self.Params).DesativarFoco(Request.Params.Field('id').AsInteger));
+end;
+
+class procedure TFocosEndpoints.PutReativarFocoEndpoint(Request: THorseRequest;
+  Response: THorseResponse; Next: TProc);
+begin
+ Response.Send<TJsonObject>(TModelFocos.New(self.Params).ReativarFoco(Request.Params.Field('id').AsInteger));
+end;
+
 class procedure TFocosEndpoints.RegistrarEndpoints;
 begin
   if not self.Params.isValidConnectionStr then
@@ -67,6 +82,8 @@ begin
   THorse.Routes.RegisterRoute(mtGet, TEndPointsFocos.Focos, GetFocosEndpoint);
   THorse.Routes.RegisterRoute(mtGet, TEndPointsFocos.FocosParent, GetFocosParentEndpoint);
   THorse.Routes.RegisterRoute(mtGet, TEndPointsFocos.FocosRegions, GetFocosRegionEndpoint);
+  THorse.Routes.RegisterRoute(mtPut, TEndPointsFocos.FocoDesativar, PutDesativarFocoEndpoint);
+  THorse.Routes.RegisterRoute(mtPut, TEndPointsFocos.FocoReativar, PutReativarFocoEndpoint);
   {$ENDIF}
 end;
 

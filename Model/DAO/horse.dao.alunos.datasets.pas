@@ -5,12 +5,13 @@ interface
 uses
  System.Classes, System.JSON, Data.DB, System.SysUtils,
   horse.dao.alunos.sqlconsts, horse.service.params.types,
-  horse.dao.alunos.interfaces, horse.dao.connection.factory;
+  horse.dao.alunos.interfaces, horse.dao.connection.factory,
+  horse.dao.customobj.datasets;
 
 type
-  TDAOAlunos = class(TInterfacedObject, IDAOAlunos)
+  TDAOAlunos = class(TDAOCustomObj, IDAOAlunos)
     private
-      FParams: TBackendParams;
+      //FParams: TBackendParams;
 
     protected
       constructor Create(const Params: TBackendParams);
@@ -30,12 +31,12 @@ implementation
 
 constructor TDAOAlunos.Create(const Params: TBackendParams);
 begin
- FParams := Params;
+ inherited Create(Params);
 end;
 
 destructor TDAOAlunos.Destroy;
 begin
-
+ inherited Destroy;
 end;
 
 class function TDAOAlunos.New(const Params: TBackendParams): IDAOAlunos;
@@ -48,7 +49,7 @@ var
  Ds: TDataset;
  JsonObj: TJSonObject;
 begin
- Ds := TConnectionFactory.New(FParams.ConnectionStr).CreateDataset(TAlunosCommands.ListAll);
+ Ds := TConnectionFactory.New(Params.ConnectionStr).CreateDataset(TAlunosCommands.ListAll);
  Result := TJsonArray.Create;
  while not Ds.Eof do
   begin
@@ -69,7 +70,7 @@ var
  JsonObj: TJSonObject;
 begin
  sCommand := string.Format(TAlunosCommands.ListByFoco, [id]);
- Ds := TConnectionFactory.New(FParams.ConnectionStr).CreateDataset(sCommand);
+ Ds := TConnectionFactory.New(Params.ConnectionStr).CreateDataset(sCommand);
  Result := TJsonArray.Create;
  while not Ds.Eof do
   begin
@@ -89,7 +90,7 @@ var
  JsonObj: TJSonObject;
 begin
  sCommand := string.Format(TAlunosCommands.ListByGroup, [focoid, groupid]);
- Ds := TConnectionFactory.New(FParams.ConnectionStr).CreateDataset(sCommand);
+ Ds := TConnectionFactory.New(Params.ConnectionStr).CreateDataset(sCommand);
  Result := TJsonArray.Create;
  while not Ds.Eof do
   begin
@@ -108,7 +109,7 @@ var
  Ds: TDataset;
 begin
  sCommand := string.Format(TAlunosCommands.ListMember, [id]);
- Ds := TConnectionFactory.New(FParams.ConnectionStr).CreateDataset(sCommand);
+ Ds := TConnectionFactory.New(Params.ConnectionStr).CreateDataset(sCommand);
  Result := TJSonObject.Create;
  Result.AddPair('codigo', Ds.Fields.FieldByName('codcad').AsString);
  Result.AddPair('nome', Ds.Fields.FieldByName('nomcad').AsString);

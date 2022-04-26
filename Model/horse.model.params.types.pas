@@ -26,12 +26,6 @@ uses
     CommandTimeout: integer;
   end;
 
-  //Parâmetros usados para todo agendamento de execução do service.
-  TModelSchedulingParams = record
-    Enabled: boolean;
-    IntervalExec: integer;
-  end;
-
   //Abstrai os parâmetros configuráveis (via arquivo ini) do serviço local "Service NFe"
   TModelServiceParams = record
     ServiceName: string;
@@ -39,7 +33,6 @@ uses
     ModelLogsFile: string;
     Data: TModelDataParams;
     Task: TModelTaskParams;
- //   Companies: TDataInfo;
     Timeouts: TModelTimeouts;
   end;
   

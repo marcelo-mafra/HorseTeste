@@ -13,6 +13,7 @@ type
     function ListRegionsParent(const id: integer): TJsonArray;
     function NewRegion(obj: TJsonObject): IDAORegioes;
     function UpdateRegion(obj: TJsonObject): TJsonObject;
+    function DeleteRegion(const id: integer): boolean;
   end;
 
 implementation

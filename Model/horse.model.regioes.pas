@@ -19,6 +19,7 @@ type
       function ListRegionsParent(const id: integer): TJsonArray;
       procedure NewRegion(obj: TJsonObject);
       function UpdateRegion(obj: TJsonObject): TJsonObject;
+      function DeleteRegion(const id: integer): boolean;
 
     public
       destructor Destroy; override;
@@ -65,9 +66,22 @@ begin
  end;
 end;
 
+function TModelRegioes.DeleteRegion(const id: integer): boolean;
+begin
+ try
+  Result := TDAORegioes.New(FParams).DeleteRegion(id);
+ except
+  raise;
+ end;
+end;
+
 function TModelRegioes.ListMember(const id: integer): TJsonObject;
 begin
- Result := TDAORegioes.New(FParams).ListMember(id);
+ try
+  Result := TDAORegioes.New(FParams).ListMember(id);
+ except
+  raise;
+ end;
 end;
 
 function TModelRegioes.ListRegions: TJsonArray;

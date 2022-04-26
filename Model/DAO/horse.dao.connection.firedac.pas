@@ -3,11 +3,12 @@ unit horse.dao.connection.firedac;
 interface
 
 uses
- Winapi.Windows, System.Classes, System.SysUtils, Data.DB,
- System.variants, FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.DApt, FireDAC.Stan.Factory,
- FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf, FireDAC.Stan.Def,
+ Winapi.Windows, System.Classes, System.SysUtils, System.variants, Data.DB,
+ FireDAC.Stan.Param, FireDAC.Comp.Client, FireDAC.Stan.Def,
+  FireDAC.Stan.Intf, FireDAC.Stan.Option, FireDAC.DApt, FireDAC.Stan.Factory,
+ FireDAC.Stan.Error, FireDAC.UI.Intf, FireDAC.Phys.Intf,
  FireDAC.Stan.Pool, FireDAC.Stan.Async, FireDAC.Phys, FireDAC.Phys.FB,
- FireDAC.Phys.FBDef, FireDAC.VCLUI.Wait, FireDAC.Comp.Client, FireDAC.Comp.DataSet,
+ FireDAC.Phys.FBDef, FireDAC.VCLUI.Wait, FireDAC.Comp.DataSet,
  //horse units...
  horse.dao.connection.interfaces,
  horse.dao.connection.types,
@@ -25,6 +26,8 @@ type
    //Eventos mapeados
    FOnError: TOnDBErrorEvent;
    FOnExecuteCommand: TOnExecuteCommandEvent;
+   procedure CommitTransaction(Obj: TFDConnection); inline;
+   procedure Rollback(Obj: TFDConnection); inline;
 
    function CreateConnection: TFDConnection; inline;
    procedure DestroyConnection; inline;
@@ -36,8 +39,11 @@ type
       OnExecuteCommand: TOnExecuteCommandEvent);
    //IAbstractConnection methods
    function Connection: TCustomConnection;
-   function CreateDataset(const Command: string): TDataset; inline;
-   procedure ExecuteCommand(const Command: string);
+   function CreateDataset(const Command: string): TDataset; overload;
+   function CreateDataset(const Command: string; const Params: TParams): TDataset; overload;
+   procedure ExecuteCommand(const Command: string); overload;
+   procedure ExecuteCommand(const Command: string; var Executed: boolean); overload;
+   procedure ExecuteCommand(const Command: string; const Params: TParams); overload;
    procedure ExecuteScript(var Script: TStringList);
 
   public
@@ -83,6 +89,16 @@ begin
  Result := self.Create(ConnectionStr, ConnectionTimeout, QueryTimeout, OnError, OnExecuteCommand) as IAbstractConnection;
 end;
 
+procedure TFiredacHorseConnection.Rollback(Obj: TFDConnection);
+begin
+if TFDConnection(Connection).InTransaction then TFDConnection(Connection).Rollback;
+end;
+
+procedure TFiredacHorseConnection.CommitTransaction(Obj: TFDConnection);
+begin
+  if Obj.InTransaction then Obj.Commit;
+end;
+
 function TFiredacHorseConnection.Connection: TCustomConnection;
 begin
  Result := self.CreateConnection as TFDConnection;
@@ -109,6 +125,34 @@ begin
      Result := FADOConnObj;
     end;
   end;
+end;
+
+function TFiredacHorseConnection.CreateDataset(const Command: string;
+  const Params: TParams): TDataset;
+var
+ FDParams: TFDParams;
+begin
+//Cria e retorna um dataset conectado a um TFDConnection
+ Result := TFDQuery.Create(nil);
+ FDParams := TFDParams.Create;
+ FDParams.Assign(Params);
+ try
+   TFDQuery(Result).Connection := TFDConnection(self.Connection);
+   TFDQuery(Result).SQL.Text := Command;
+   TFDQuery(Result).Params.Assign(FDParams);
+   TFDQuery(Result).Open;
+ except
+   on E: Exception do
+    begin
+     if Assigned(Result) then
+      begin
+       if Result.Active then TFDQuery(Result).Close;
+       FreeAndNil(Result);
+      end;
+     if Assigned(FOnError) then self.OnError(E.Message, E.ClassName, Command);
+     raise;
+    end;
+ end;
 end;
 
 function TFiredacHorseConnection.CreateDataset(const Command: string): TDataset;
@@ -161,13 +205,35 @@ begin
   TFDConnection(Connection).StartTransaction;
   TFDConnection(Connection).ExecSQL(Command);
   //Finalmente, tenta dar "commit" em todas as execuções dos comandos
-  if TFDConnection(Connection).InTransaction then TFDConnection(Connection).Commit;
+  self.CommitTransaction(TFDConnection(Connection));
 
  except
   on E: Exception do
    begin
      //Rollback na execuçao do comando
-     if TFDConnection(Connection).InTransaction then TFDConnection(Connection).Rollback;
+     self.Rollback(TFDConnection(Connection));
+     raise;
+   end;
+ end;
+end;
+
+procedure TFiredacHorseConnection.ExecuteCommand(const Command: string;
+  var Executed: boolean);
+begin
+ Executed := False;
+ //Executa um comando SQL dentro de contexto transacional.
+ try
+  //Inicia uma nova transação e executa cada um dos comandos existentes em "Script"
+  TFDConnection(Connection).StartTransaction;
+  Executed := TFDConnection(Connection).ExecSQL(Command) > 0;
+  //Finalmente, tenta dar "commit" em todas as execuções dos comandos
+  self.CommitTransaction(TFDConnection(Connection));
+
+ except
+  on E: Exception do
+   begin
+     //Rollback na execuçao do comando
+     self.Rollback(TFDConnection(Connection));
      raise;
    end;
  end;
@@ -187,17 +253,17 @@ begin
   for I := 0 to Pred(Script.Count) do
    begin
     CurrentCmd := Script.Strings[I];
-    if Trim(CurrentCmd) = EmptyStr then Continue;
+    if CurrentCmd.Trim = EmptyStr then Continue;
     TFDConnection(Connection).ExecSQL(CurrentCmd);
    end;
   //Finalmente, tenta dar "commit" em todas as execuções dos comandos
-  if TFDConnection(Connection).InTransaction then TFDConnection(Connection).Commit;
+  self.CommitTransaction(TFDConnection(Connection));
 
  except
   on E: Exception do
    begin
      //Reverte a execução de todos os comandos do script.
-     if TFDConnection(Connection).InTransaction then TFDConnection(Connection).Rollback;
+     self.Rollback(TFDConnection(Connection));
      //Dispara o evento OnExecuteCommand, ao término da execução com falha fatal.
      if Assigned(FOnExecuteCommand) then OnExecuteCommand(CurrentCmd, Script, E);
      raise;
@@ -205,5 +271,30 @@ begin
  end;
 end;
 
+procedure TFiredacHorseConnection.ExecuteCommand(const Command: string;
+    const Params: TParams);
+var
+ FDParams: TFDParams;
+begin
+ //Executa um comando SQL dentro de contexto transacional.
+  FDParams := TFDParams.Create;
+  FDParams.Assign(Params);
+
+ try
+  //Inicia uma nova transação e executa cada um dos comandos existentes em "Script"
+  TFDConnection(Connection).StartTransaction;
+  TFDConnection(Connection).ExecSQL(Command, FDParams);
+  //Finalmente, tenta dar "commit" em todas as execuções dos comandos
+  self.CommitTransaction(TFDConnection(Connection));
+
+ except
+  on E: Exception do
+   begin
+     //Rollback na execuçao do comando
+     self.Rollback(TFDConnection(Connection));
+     raise;
+   end;
+ end;
+end;
 
 end.

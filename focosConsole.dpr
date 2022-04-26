@@ -42,7 +42,9 @@ uses
   horse.model.exceptions in 'Model\horse.model.exceptions.pas',
   horse.model.regioes.exceptions in 'Model\horse.model.regioes.exceptions.pas',
   horse.model.customobj in 'Model\horse.model.customobj.pas',
-  horse.controller.router.exceptions in 'Controller\horse.controller.router.exceptions.pas';
+  horse.controller.router.exceptions in 'Controller\horse.controller.router.exceptions.pas',
+  horse.model.params.builder.interfaces in 'Model\horse.model.params.builder.interfaces.pas',
+  horse.dao.customobj.datasets in 'Model\DAO\horse.dao.customobj.datasets.pas';
 
 procedure DoCallback(AReq: THorseRequest; ARes: THorseResponse; ANext: TNextProc);
 begin
@@ -69,6 +71,7 @@ end;
 
 begin
   try
+    ReportMemoryLeaksOnShutdown := True;
     InitializeService;
 
   except

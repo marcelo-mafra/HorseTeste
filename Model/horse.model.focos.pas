@@ -17,6 +17,8 @@ type
       function ListMember(const id: integer): TJsonObject;
       function ListFocosParent(const id: integer): TJsonArray;
       function ListFocosRegion(const id: integer): TJsonArray;
+      function DesativarFoco(const id: integer): TJsonObject;
+      function ReativarFoco(const id: integer): TJsonObject;
 
     public
       destructor Destroy; override;
@@ -62,6 +64,16 @@ end;
 function TModelFocos.ListMember(const id: integer): TJsonObject;
 begin
  Result := TDAOFocos.New(FParams).ListMember(id);
+end;
+
+function TModelFocos.DesativarFoco(const id: integer): TJsonObject;
+begin
+ Result := TDAOFocos.New(FParams).DesativarFoco(id);
+end;
+
+function TModelFocos.ReativarFoco(const id: integer): TJsonObject;
+begin
+ Result := TDAOFocos.New(FParams).ReativarFoco(id);
 end;
 
 end.

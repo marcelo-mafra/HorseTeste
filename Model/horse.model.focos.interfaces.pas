@@ -12,6 +12,8 @@ type
       function ListFocosRegion(const id: integer): TJsonArray;
       function ListFocosParent(const id: integer): TJsonArray;
       function ListMember(const id: integer): TJsonObject;
+      function DesativarFoco(const id: integer): TJsonObject;
+      function ReativarFoco(const id: integer): TJsonObject;
 
   end;
 

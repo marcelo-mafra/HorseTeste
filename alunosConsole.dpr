@@ -32,7 +32,8 @@ uses
   horse.dao.alunos.sqlconsts in 'Model\DAO\horse.dao.alunos.sqlconsts.pas',
   horse.dao.alunos.interfaces in 'Model\DAO\horse.dao.alunos.interfaces.pas',
   horse.model.alunos.interfaces in 'Model\horse.model.alunos.interfaces.pas',
-  horse.controller.router.focos in 'Controller\horse.controller.router.focos.pas';
+  horse.controller.router.focos in 'Controller\horse.controller.router.focos.pas',
+  horse.model.params.builder.interfaces in 'Model\horse.model.params.builder.interfaces.pas';
 
 procedure InitializeService;
 var

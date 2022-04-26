@@ -220,6 +220,8 @@
         <DCCReference Include="Model\horse.model.regioes.exceptions.pas"/>
         <DCCReference Include="Model\horse.model.customobj.pas"/>
         <DCCReference Include="Controller\horse.controller.router.exceptions.pas"/>
+        <DCCReference Include="Model\horse.model.params.builder.interfaces.pas"/>
+        <DCCReference Include="Model\DAO\horse.dao.customobj.datasets.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
