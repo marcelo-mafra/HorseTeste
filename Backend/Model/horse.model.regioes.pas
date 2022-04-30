@@ -10,9 +10,10 @@ uses
 type
   TModelRegioes = class(TModelCustomObject, IModelRegioes)
     private
-      FParams: TBackendParams;
+
     protected
-      constructor Create(const Params: TBackendParams);
+      constructor Create(const Params: TBackendParams); overload;
+      constructor Create(const Params: TBackendParams; obj: TJsonObject); overload;
       //regiões administrativas
       function ListRegions: TJsonArray;
       function ListMember(const id: integer): TJsonObject;
@@ -23,8 +24,10 @@ type
 
     public
       destructor Destroy; override;
-      class function New(const Params: TBackendParams): IModelRegioes;
-      function AsJson(const Data: string): TJsonObject; override;
+      class function New(const Params: TBackendParams): IModelRegioes; overload;
+      class function New(const Params: TBackendParams; obj: TJsonObject): IModelRegioes; overload;
+      function AsJsonObject: TJsonObject; override;
+      procedure ToObject(obj: TJsonObject); override;
   end;
 
 implementation
@@ -33,8 +36,7 @@ implementation
 
 constructor TModelRegioes.Create(const Params: TBackendParams);
 begin
- inherited Create;
- self.FParams := Params;
+ inherited Create(Params);
 end;
 
 destructor TModelRegioes.Destroy;
@@ -48,28 +50,47 @@ begin
  result := self.Create(Params);
 end;
 
+class function TModelRegioes.New(const Params: TBackendParams;
+  obj: TJsonObject): IModelRegioes;
+begin
+ Result := self.Create(Params, obj);
+end;
+
 procedure TModelRegioes.NewRegion(obj: TJsonObject);
 begin
  try
-  TDAORegioes.New(FParams).NewRegion(obj);
+  TDAORegioes.New(Params).NewRegion(obj);
  except
   raise;
  end;
+end;
+
+procedure TModelRegioes.ToObject(obj: TJsonObject);
+begin
+  inherited;
+
 end;
 
 function TModelRegioes.UpdateRegion(obj: TJsonObject): TJsonObject;
 begin
  try
-  Result := TDAORegioes.New(FParams).UpdateRegion(obj);
+  Result := TDAORegioes.New(Params).UpdateRegion(obj);
  except
   raise;
  end;
 end;
 
+constructor TModelRegioes.Create(const Params: TBackendParams;
+  obj: TJsonObject);
+begin
+  self.Create(Params);
+  self.ToObject(obj);
+end;
+
 function TModelRegioes.DeleteRegion(const id: integer): boolean;
 begin
  try
-  Result := TDAORegioes.New(FParams).DeleteRegion(id);
+  Result := TDAORegioes.New(Params).DeleteRegion(id);
  except
   raise;
  end;
@@ -78,7 +99,7 @@ end;
 function TModelRegioes.ListMember(const id: integer): TJsonObject;
 begin
  try
-  Result := TDAORegioes.New(FParams).ListMember(id);
+  Result := TDAORegioes.New(Params).ListMember(id);
  except
   raise;
  end;
@@ -86,17 +107,17 @@ end;
 
 function TModelRegioes.ListRegions: TJsonArray;
 begin
- Result := TDAORegioes.New(FParams).ListRegions;
+ Result := TDAORegioes.New(Params).ListRegions;
 end;
 
 function TModelRegioes.ListRegionsParent(const id: integer): TJsonArray;
 begin
- Result := TDAORegioes.New(FParams).ListRegionsParent(id);
+ Result := TDAORegioes.New(Params).ListRegionsParent(id);
 end;
 
-function TModelRegioes.AsJson(const Data: string): TJsonObject;
+function TModelRegioes.AsJsonObject: TJsonObject;
 begin
- Result := TJsonObject.ParseJSONValue(data, true, false) as TJsonObject;
+ Result := TJsonObject.Create;
 end;
 
 

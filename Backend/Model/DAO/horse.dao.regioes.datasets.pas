@@ -7,7 +7,8 @@ uses
  horse.dao.regioes.sqlconsts, horse.service.params.types,
  horse.dao.regioes.interfaces, horse.dao.connection.factory,
  horse.model.regioes.exceptions, horse.model.exceptions,
- horse.model.params.builder, horse.dao.customobj.datasets;
+ horse.model.params.builder, horse.dao.customobj.datasets,
+ horse.dao.customobj.datasets.helpers;
 
 type
   TDAORegioes = class(TDAOCustomObj, IDAORegioes)
@@ -123,11 +124,9 @@ begin
 
   Command := string.Format(TRegioesCommands.DeleteRegion, [id]);
   TConnectionFactory.New(ConnectionStr).ExecuteCommand(Command, Result);
-
  except
   raise;
  end;
-
 end;
 
 function TDAORegioes.ListMember(const id: integer): TJsonObject;
@@ -135,14 +134,13 @@ var
  Ds: TDataset;
  ParamsObj: TParams;
 begin
-  ParamsObj := TModelParamsBuilder.New.BeginObject.Add('codreg', id).ParamsObj;
   Result := TJSonObject.Create;
   try
+   ParamsObj := TModelParamsBuilder.New.BeginObject.Add('codreg', id).ParamsObj;
    Ds := TConnectionFactory.New(ConnectionStr).CreateDataset(TRegioesCommands.ListMember, ParamsObj);
    Result.AddPair('codigo', TJSONNumber(Ds.Fields.FieldByName('codreg').AsInteger));
    Result.AddPair('regiao', Ds.Fields.FieldByName('nomreg').AsString);
-   Result.AddPair('parent', self.GetJsonValue(Ds.Fields.FieldByName('codpai')));
-
+   Result.AddPair('parent', self.ToJsonValue(Ds.Fields.FieldByName('codpai')));
   except
    raise;
   end;
@@ -153,39 +151,45 @@ var
  Ds: TDataset;
  JsonObj: TJSonObject;
 begin
- Ds := TConnectionFactory.New(ConnectionStr).CreateDataset(TRegioesCommands.ListRegions);
  Result := TJsonArray.Create;
- while not Ds.Eof do
-  begin
-   JsonObj := TJSonObject.Create;
-   JsonObj.AddPair('codigo', TJSONNumber.Create(Ds.Fields.FieldByName('codreg').AsInteger));
-   JsonObj.AddPair('regiao', Ds.Fields.FieldByName('nomreg').AsString);
-   JsonObj.AddPair('parent', self.GetJsonValue(Ds.Fields.FieldByName('codpai')));
-   Result.AddElement(JsonObj);
-   Ds.Next;
-  end;
-
+ try
+   Ds := TConnectionFactory.New(ConnectionStr).CreateDataset(TRegioesCommands.ListRegions);
+   while not Ds.Eof do
+    begin
+     JsonObj := TJSonObject.Create;
+     JsonObj.AddPair('codigo', TJSONNumber.Create(Ds.Fields.FieldByName('codreg').AsInteger));
+     JsonObj.AddPair('regiao', Ds.Fields.FieldByName('nomreg').AsString);
+     JsonObj.AddPair('parent', self.ToJsonValue(Ds.Fields.FieldByName('codpai')));
+     Result.AddElement(JsonObj);
+     Ds.Next;
+    end;
+ except
+  raise;
+ end;
 end;
 
 function TDAORegioes.ListRegionsParent(const id: integer): TJsonArray;
 var
- Command: string;
  Ds: TDataset;
  JsonObj: TJSonObject;
+ ParamsObj: TParams;
 begin
- Command := string.Format(TRegioesCommands.ListRegionsParent, [id]);
- Ds := TConnectionFactory.New(ConnectionStr).CreateDataset(Command);
  Result := TJsonArray.Create;
- while not Ds.Eof do
-  begin
-   JsonObj := TJSonObject.Create;
-   JsonObj.AddPair('codigo', TJSONNumber.Create(Ds.Fields.FieldByName('codreg').AsInteger));
-   JsonObj.AddPair('regiao', Ds.Fields.FieldByName('nomreg').AsString);
-   JsonObj.AddPair('parent', self.GetJsonValue(Ds.Fields.FieldByName('codpai')));
-   Result.AddElement(JsonObj);
-   Ds.Next;
-  end;
-
+ try
+   ParamsObj := TModelParamsBuilder.New.BeginObject.Add('codpai', id).ParamsObj;
+   Ds := TConnectionFactory.New(ConnectionStr).CreateDataset(TRegioesCommands.ListRegionsParent, ParamsObj);
+   while not Ds.Eof do
+    begin
+     JsonObj := TJSonObject.Create;
+     JsonObj.AddPair('codigo', TJSONNumber.Create(Ds.Fields.FieldByName('codreg').AsInteger));
+     JsonObj.AddPair('regiao', Ds.Fields.FieldByName('nomreg').AsString);
+     JsonObj.AddPair('parent', self.ToJsonValue(Ds.Fields.FieldByName('codpai')));
+     Result.AddElement(JsonObj);
+     Ds.Next;
+    end;
+ except
+  raise;
+ end;
 end;
 
 end.

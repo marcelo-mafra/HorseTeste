@@ -27,6 +27,10 @@ type
       Next: TProc);
    class procedure PutReativarFocoEndpoint(Request: THorseRequest; Response: THorseResponse;
       Next: TProc);
+   class procedure GetFocosStatusEndpoint(Request: THorseRequest; Response: THorseResponse;
+      Next: TProc);
+   class procedure GetFocosTipoEndpoint(Request: THorseRequest; Response: THorseResponse;
+      Next: TProc);
    class procedure RegistrarEndpoints;
 
  end;
@@ -38,7 +42,8 @@ implementation
 class procedure TFocosEndpoints.GetFocoEndpoint(Request: THorseRequest;
   Response: THorseResponse; Next: TProc);
 begin
- Response.Send<TJsonObject>(TModelFocos.New(self.Params).ListMember(Request.Params.Field('id').AsInteger));
+ Response.Send<TJsonObject>(TModelFocos.New(self.Params).ListMember
+      (Request.Params.Field('id').AsInteger));
 end;
 
 class procedure TFocosEndpoints.GetFocosEndpoint(Request: THorseRequest;
@@ -50,13 +55,31 @@ end;
 class procedure TFocosEndpoints.GetFocosParentEndpoint(
   Request: THorseRequest; Response: THorseResponse; Next: TProc);
 begin
-  Response.Send<TJsonArray>(TModelFocos.New(Params).ListFocosParent(Request.Params.Field('id').AsInteger));
+  Response.Send<TJsonArray>(TModelFocos.New(Params).ListFocosParent
+      (Request.Params.Field('id').AsInteger));
 end;
 
 class procedure TFocosEndpoints.GetFocosRegionEndpoint(
   Request: THorseRequest; Response: THorseResponse; Next: TProc);
 begin
   Response.Send<TJsonArray>(TModelFocos.New(Params).ListFocosRegion(Request.Params.Field('id').AsInteger));
+end;
+
+class procedure TFocosEndpoints.GetFocosStatusEndpoint(Request: THorseRequest;
+  Response: THorseResponse; Next: TProc);
+begin
+  Response.Send<TJsonArray>(TModelFocos.New(Params).ListFocosStatus
+    (Request.Params.Field('status').AsBoolean));
+end;
+
+class procedure TFocosEndpoints.GetFocosTipoEndpoint(Request: THorseRequest;
+  Response: THorseResponse; Next: TProc);
+begin
+  Response.Send<TJsonArray>(TModelFocos.New(Params).ListFocosTipo
+    (
+      Request.Params.Field('idregiao').AsInteger,
+      Request.Params.Field('tipo').Asstring
+    ));
 end;
 
 class procedure TFocosEndpoints.PutDesativarFocoEndpoint(Request: THorseRequest;
@@ -82,6 +105,8 @@ begin
   THorse.Routes.RegisterRoute(mtGet, TEndPointsFocos.Focos, GetFocosEndpoint);
   THorse.Routes.RegisterRoute(mtGet, TEndPointsFocos.FocosParent, GetFocosParentEndpoint);
   THorse.Routes.RegisterRoute(mtGet, TEndPointsFocos.FocosRegions, GetFocosRegionEndpoint);
+  THorse.Routes.RegisterRoute(mtGet, TEndPointsFocos.FocosStatus, GetFocosStatusEndpoint);
+  THorse.Routes.RegisterRoute(mtGet, TEndPointsFocos.FocosTipo, GetFocosTipoEndpoint);
   THorse.Routes.RegisterRoute(mtPut, TEndPointsFocos.FocoDesativar, PutDesativarFocoEndpoint);
   THorse.Routes.RegisterRoute(mtPut, TEndPointsFocos.FocoReativar, PutReativarFocoEndpoint);
   {$ENDIF}

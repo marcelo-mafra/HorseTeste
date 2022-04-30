@@ -7,11 +7,11 @@ uses
  Horse, Horse.Jhonson,
  horse.controller.router.types, horse.service.params,
  horse.service.params.consts, horse.service.params.types,
- {$IF DEFINED(ALUNOS_SVC)}
+ {$IFDEF ALUNOS_SVC}
  horse.controller.router.alunos,
  {$ENDIF}
 
- {$IF DEFINED(FOCOS_SVC)}
+ {$IFDEF FOCOS_SVC}
  horse.controller.router.focos,
  horse.controller.router.regioes,
  {$ENDIF}
@@ -51,13 +51,19 @@ implementation
 constructor THorseRouter.Create;
 begin
  inherited;
- {$IF DEFINED(ALUNOS_SVC)}
- FFileName := TServiceParamsFiles.Alunos;
- {$ENDIF}
 
- {$IF DEFINED(FOCOS_SVC)}
- FFileName := TServiceParamsFiles.Focos;
- {$ENDIF}
+// {$IFDEF ALUNOS_SVC}
+//    FFileName := TServiceParamsFiles.Alunos;
+// {$ELSEIF FOCOS_SVC}
+//    FFileName := TServiceParamsFiles.Focos;
+// {$IFEND}
+
+ {$IFDEF ALUNOS_SVC}
+    FFileName := TServiceParamsFiles.Alunos;
+ {$IFEND}
+ {$IFDEF FOCOS_SVC}
+    FFileName := TServiceParamsFiles.Focos;
+ {$IFEND}
 
  THorseParams.New(self.ParamsFile).ReadParams(FServiceParams);
 end;
@@ -111,20 +117,19 @@ end;
 function THorseRouter.RegisterEndpoints: IHorseRouter;
 begin
   Result := self;
-  {$IF DEFINED(ALUNOS_SVC)}
-  //Endpoints do domínio ALUNOS
-  TAlunosEndpoints.Params := self.FServiceParams;
-  TAlunosEndpoints.RegistrarEndpoints;
-  {$ENDIF}
-
-  {$IF DEFINED(FOCOS_SVC)}
-  //Endpoints do domínio FOCOS
-  TFocosEndpoints.Params := self.FServiceParams;
-  TFocosEndpoints.RegistrarEndpoints;
-  //Endpoints do domínio REGIOES
-  TRegioesEndpoints.Params := self.FServiceParams;
-  TRegioesEndpoints.RegistrarEndpoints;
-  {$ENDIF}
+  {$IFDEF ALUNOS_SVC}
+    //Endpoints do domínio ALUNOS
+    TAlunosEndpoints.Params := self.FServiceParams;
+    TAlunosEndpoints.RegistrarEndpoints;
+ {$ENDIF}
+ {$IFDEF FOCOS_SVC}
+    //Endpoints do domínio FOCOS
+    TFocosEndpoints.Params := self.FServiceParams;
+    TFocosEndpoints.RegistrarEndpoints;
+    //Endpoints do domínio REGIOES
+    TRegioesEndpoints.Params := self.FServiceParams;
+    TRegioesEndpoints.RegistrarEndpoints;
+ {$ENDIF}
 end;
 
 

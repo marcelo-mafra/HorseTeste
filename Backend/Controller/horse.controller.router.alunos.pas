@@ -18,6 +18,8 @@ type
 
    class procedure GetAlunoEndpoint(Request: THorseRequest; Response: THorseResponse;
       Next: TProc);
+   class procedure GetAlunoMatriculaEndpoint(Request: THorseRequest; Response: THorseResponse;
+      Next: TProc);
    class procedure GetAlunosEndpoint(Request: THorseRequest; Response: THorseResponse;
       Next: TProc);
    class procedure GetAlunosFocoEndpoint(Request: THorseRequest; Response: THorseResponse;
@@ -35,6 +37,12 @@ class procedure TAlunosEndpoints.GetAlunoEndpoint(Request: THorseRequest;
   Response: THorseResponse; Next: TProc);
 begin
  Response.Send<TJsonObject>(TModelAlunos.New(self.Params).ListMember(Request.Params.Field('id').AsInteger));
+end;
+
+class procedure TAlunosEndpoints.GetAlunoMatriculaEndpoint(
+  Request: THorseRequest; Response: THorseResponse; Next: TProc);
+begin
+ Response.Send<TJsonObject>(TModelAlunos.New(self.Params).ListMemberMatricula(Request.Params.Field('matricula').AsString));
 end;
 
 class procedure TAlunosEndpoints.GetAlunosEndpoint(Request: THorseRequest;
@@ -65,6 +73,7 @@ begin
   //Endpoints do domínio ALUNOS
   THorse.Routes.RegisterRoute(mtGet, TEndPoints.Alunos, GetAlunosEndpoint);
   THorse.Routes.RegisterRoute(mtGet, TEndPoints.Aluno, GetAlunoEndpoint);
+  THorse.Routes.RegisterRoute(mtGet, TEndPoints.AlunoMatricula, GetAlunoMatriculaEndpoint);
   THorse.Routes.RegisterRoute(mtGet, TEndPoints.AlunosFoco, GetAlunosFocoEndpoint);
   THorse.Routes.RegisterRoute(mtGet, TEndPoints.AlunosFocoGroup, GetAlunosGroupEndpoint);
   {$ENDIF}

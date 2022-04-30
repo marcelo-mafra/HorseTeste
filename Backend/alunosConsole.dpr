@@ -2,7 +2,7 @@ program alunosConsole;
 
 {$APPTYPE CONSOLE}
 
-{$DEFINE ALUNOS_SVC ON}
+{$DEFINE ALUNOS_SVC}
 
 {$R *.res}
 
@@ -32,21 +32,22 @@ uses
   horse.dao.alunos.sqlconsts in 'Model\DAO\horse.dao.alunos.sqlconsts.pas',
   horse.dao.alunos.interfaces in 'Model\DAO\horse.dao.alunos.interfaces.pas',
   horse.model.alunos.interfaces in 'Model\horse.model.alunos.interfaces.pas',
-  horse.controller.router.focos in 'Controller\horse.controller.router.focos.pas',
   horse.model.params.builder.interfaces in 'Model\horse.model.params.builder.interfaces.pas';
 
 procedure InitializeService;
 var
  Params: TBackendParams;
 begin
+  Writeln(Format(TBackendInfo.Starting, [TBackendInfo.SvcAlunos]));
   Params := THorseRouter.New.ServiceParams;
-  writeln(Format(TCoreBackendInfo.HorseVersion, [THorseRouter.New.HorseVersion]));
-  writeln(Format(TCoreBackendInfo.Listenning, [Params.Host + ':' + Params.Porta.ToString ]));
+  writeln(Format(TBackendInfo.HorseVersion, [THorseRouter.New.HorseVersion]));
+  writeln(Format(TBackendInfo.Listenning, [TBackendInfo.SvcAlunos, Params.Host + ':' + Params.Porta.ToString ]));
   THorseRouter.New.RegisterEndpoints.InitializeService;
 end;
 
 begin
   try
+    ReportMemoryLeaksOnShutdown := True;
     InitializeService;
 
   except

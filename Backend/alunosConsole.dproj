@@ -90,7 +90,7 @@
         <DCC_UnitSearchPath>$(COSMOS_HORSE)\Backend\Controller;$(COSMOS_HORSE)\Backend\Model;$(COSMOS_HORSE)\Backend\Model\DAO;$(DCC_UnitSearchPath)</DCC_UnitSearchPath>
         <VerInfo_Locale>1046</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=$(MSBuildProjectName);FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProgramID=com.embarcadero.$(MSBuildProjectName);ProductName=$(MSBuildProjectName);ProductVersion=1.0.0.0;Comments=</VerInfo_Keys>
-        <DCC_Define>ALUNOS_SVC;FOCOS_SVC;$(DCC_Define)</DCC_Define>
+        <DCC_Define>ALUNOS_SVC;$(DCC_Define)</DCC_Define>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Android)'!=''">
         <DCC_UsePackage>DBXSqliteDriver;DBXInterBaseDriver;DataSnapFireDAC;tethering;bindcompfmx;FmxTeeUI;fmx;FireDACDBXDriver;dbexpress;IndyCore;dsnap;DataSnapCommon;bindengine;DataSnapClient;bindcompdbx;IndyIPCommon;IndyIPServer;IndySystem;fmxFireDAC;ibmonitor;FMXTee;DbxCommonDriver;ibxpress;xmlrtl;DataSnapNativeClient;ibxbindings;rtl;FireDACDSDriver;DbxClientDriver;CustomIPTransport;bindcomp;IndyIPClient;dbxcds;dsnapxml;DataSnapProviderClient;dbrtl;IndyProtocols;$(DCC_UsePackage)</DCC_UsePackage>
@@ -218,7 +218,6 @@
         <DCCReference Include="Model\DAO\horse.dao.alunos.sqlconsts.pas"/>
         <DCCReference Include="Model\DAO\horse.dao.alunos.interfaces.pas"/>
         <DCCReference Include="Model\horse.model.alunos.interfaces.pas"/>
-        <DCCReference Include="Controller\horse.controller.router.focos.pas"/>
         <DCCReference Include="Model\horse.model.params.builder.interfaces.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>

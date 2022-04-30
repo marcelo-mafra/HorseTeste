@@ -331,6 +331,21 @@
             <Form>FrmMain</Form>
             <FormType>fmx</FormType>
         </DCCReference>
+        <DCCReference Include="Model\DAO\client.dao.http.connection.pas"/>
+        <DCCReference Include="Model\DAO\client.dao.http.connection.interfaces.pas"/>
+        <DCCReference Include="Controller\client.controller.regions.pas"/>
+        <DCCReference Include="Controller\client.controller.regions.interfaces.pas"/>
+        <DCCReference Include="Model\client.model.regions.pas"/>
+        <DCCReference Include="Model\client.model.regions.interfaces.pas"/>
+        <DCCReference Include="Model\client.model.customobj.pas"/>
+        <DCCReference Include="Model\DAO\client.dao.http.connection.consts.pas"/>
+        <DCCReference Include="Model\client.model.regions.regionobj.pas"/>
+        <DCCReference Include="Model\client.model.regions.factory.pas"/>
+        <DCCReference Include="view\cosmos.view.regions.actions.pas"/>
+        <DCCReference Include="Controller\client.controller.regions.types.pas"/>
+        <DCCReference Include="view\cosmos.view.regions.actions.interfaces.pas"/>
+        <DCCReference Include="Model\DAO\client.dao.http.connection.regions.pas"/>
+        <DCCReference Include="Model\DAO\client.dao.http.connection.regions.interfaces.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -396,9 +411,21 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
+                <DeployFile LocalName="Win64\Debug\cosmos.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win64">
+                        <RemoteName>cosmos.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName="$(BDS)\bin\Artwork\Android\FM_SplashImage_426x320.png" Configuration="Debug" Class="Android_SplashImage426">
                     <Platform Name="Android">
                         <RemoteName>splash_image.png</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Win64\Debug\cosmos.rsm" Configuration="Debug" Class="DebugSymbols">
+                    <Platform Name="Win64">
+                        <RemoteName>cosmos.rsm</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

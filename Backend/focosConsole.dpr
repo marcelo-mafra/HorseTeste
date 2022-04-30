@@ -2,7 +2,7 @@ program focosConsole;
 
 {$APPTYPE CONSOLE}
 
-{$DEFINE FOCOS_SVC ON}
+{$DEFINE FOCOS_SVC}
 
 {$R *.res}
 
@@ -44,7 +44,8 @@ uses
   horse.model.customobj in 'Model\horse.model.customobj.pas',
   horse.controller.router.exceptions in 'Controller\horse.controller.router.exceptions.pas',
   horse.model.params.builder.interfaces in 'Model\horse.model.params.builder.interfaces.pas',
-  horse.dao.customobj.datasets in 'Model\DAO\horse.dao.customobj.datasets.pas';
+  horse.dao.customobj.datasets in 'Model\DAO\horse.dao.customobj.datasets.pas',
+  horse.dao.customobj.datasets.helpers in 'Model\DAO\horse.dao.customobj.datasets.helpers.pas';
 
 procedure DoCallback(AReq: THorseRequest; ARes: THorseResponse; ANext: TNextProc);
 begin
@@ -55,9 +56,10 @@ procedure InitializeService;
 var
  Params: TBackendParams;
 begin
+  Writeln(Format(TBackendInfo.Starting, [TBackendInfo.SvcFocos]));
   Params := THorseRouter.New.ServiceParams;
-  writeln(Format(TCoreBackendInfo.HorseVersion, [THorseRouter.New.HorseVersion]));
-  writeln(Format(TCoreBackendInfo.Listenning, [Params.Host + ':' + Params.Porta.ToString ]));
+  writeln(Format(TBackendInfo.HorseVersion, [THorseRouter.New.HorseVersion]));
+  writeln(Format(TBackendInfo.Listenning, [TBackendInfo.SvcFocos, Params.Host + ':' + Params.Porta.ToString ]));
   THorseRouter.New.RegisterEndpoints
     .InitializeService
     (
@@ -66,7 +68,6 @@ begin
         Writeln(AReq.Body);
       end
     );
-
 end;
 
 begin

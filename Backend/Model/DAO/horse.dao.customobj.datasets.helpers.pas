@@ -10,8 +10,10 @@ uses
 type
  TDAOCustomObjHelper = class helper for TDAOCustomObj
 
-   function GetJsonValue(Field: TField): TJSONValue;
+   function ToJsonValue(Field: TField): TJSONValue;
+   function ToJsonBoolean(const value: string): TJSONBool; inline;
    function ToString(value: boolean): string; inline;
+   function ToBoolean(value: string): boolean; inline;
 
  end;
 
@@ -19,7 +21,17 @@ implementation
 
 { TDAOCustomObjHelper }
 
-function TDAOCustomObjHelper.GetJsonValue(Field: TField): TJSONValue;
+function TDAOCustomObjHelper.ToBoolean(value: string): boolean;
+begin
+ Result := value.Trim.UpperCase(value) = 'S';
+end;
+
+function TDAOCustomObjHelper.ToJsonBoolean(const value: string): TJSONBool;
+begin
+ Result := TJSONBool.Create(self.ToBoolean(value));
+end;
+
+function TDAOCustomObjHelper.ToJsonValue(Field: TField): TJSONValue;
 begin
  Result := nil;
  if Field.IsNull then Result := TJSONNull.Create

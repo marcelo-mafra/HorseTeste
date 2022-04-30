@@ -5,18 +5,17 @@ interface
 uses
   System.Classes, System.Generics.Collections, System.JSON,
   horse.dao.alunos.datasets, horse.service.params.types,
-  horse.model.alunos.interfaces ;
+  horse.model.alunos.interfaces, horse.model.customobj ;
 
 type
-  TModelAlunos = class(TInterfacedObject, IModelAlunos)
-    private
-      FParams: TBackendParams;
+  TModelAlunos = class(TModelCustomObject, IModelAlunos)
     protected
       constructor Create(const Params: TBackendParams);
       function ListAll: TJsonArray;
       function ListByFoco(const id: integer): TJsonArray;
       function ListByGroup(const focoid, groupid: integer): TJsonArray;
       function ListMember(const id: integer): TJsonObject;
+      function ListMemberMatricula(const matricula: string): TJsonObject;
     public
       destructor Destroy; override;
       class function New(const Params: TBackendParams): IModelAlunos;
@@ -29,8 +28,7 @@ implementation
 
 constructor TModelAlunos.Create(const Params: TBackendParams);
 begin
- inherited Create;
- self.FParams := Params;
+ inherited Create(Params);
 end;
 
 destructor TModelAlunos.Destroy;
@@ -40,22 +38,27 @@ end;
 
 function TModelAlunos.ListAll: TJsonArray;
 begin
- Result := TDAOAlunos.New(FParams).ListAll;
+ Result := TDAOAlunos.New(Params).ListAll;
 end;
 
 function TModelAlunos.ListByFoco(const id: integer): TJsonArray;
 begin
- Result := TDAOAlunos.New(FParams).ListByFoco(id);
+ Result := TDAOAlunos.New(Params).ListByFoco(id);
 end;
 
 function TModelAlunos.ListByGroup(const focoid, groupid: integer): TJsonArray;
 begin
- Result := TDAOAlunos.New(FParams).ListByGroup(focoid, groupid);
+ Result := TDAOAlunos.New(Params).ListByGroup(focoid, groupid);
 end;
 
 function TModelAlunos.ListMember(const id: integer): TJsonObject;
 begin
- Result := TDAOAlunos.New(FParams).ListMember(id);
+ Result := TDAOAlunos.New(Params).ListMember(id);
+end;
+
+function TModelAlunos.ListMemberMatricula(const matricula: string): TJsonObject;
+begin
+ Result := TDAOAlunos.New(Params).ListMemberMatricula(matricula);
 end;
 
 class function TModelAlunos.New(const Params: TBackendParams): IModelAlunos;

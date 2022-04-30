@@ -9,6 +9,7 @@ type
  TEndPoints = class
    const
      Aluno          = '/alunos/:id';
+     AlunoMatricula = '/alunos/matricula/:matricula';
      Alunos         = '/alunos';
      AlunosFoco     = '/alunos/focos/:id';
      AlunosFocoGroup = '/alunos/group/:focoid/:groupid';
@@ -16,12 +17,14 @@ type
 
  TEndPointsFocos = class
    const
-     Foco         = '/focos/:id';
-     Focos        = '/focos';
-     FocosParent  = '/focos/parent/:id';
+     Foco          = '/focos/:id';
+     Focos         = '/focos';
+     FocosParent   = '/focos/parent/:id';
      FocosRegions  = '/focos/regions/:id';
      FocoDesativar = '/focos/:id/desativar';
      FocoReativar  = '/focos/:id/reativar';
+     FocosStatus   = '/focos/status/:status';
+     FocosTipo     = '/focos/tipos/:idregiao/:tipo';
 
  end;
 
@@ -38,10 +41,13 @@ type
     Html = 'text/html';
  end;
 
- TCoreBackendInfo = class
+ TBackendInfo = class
    const
+    SvcAlunos      = 'Cosmos Alunos';
+    SvcFocos       = 'Cosmos Focos';
+    Starting       = 'Inicializando o service %s...';
     HorseVersion = 'Versao corrente do módulo web "Horse": %s';
-    Listenning   = 'Horse backend atendendo as requisicoes em %s';
+    Listenning   = 'O service %s está atendendo as requisicoes em %s';
  end;
 
  TClientsParams = class

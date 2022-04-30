@@ -7,6 +7,7 @@ object FrmMain: TFrmMain
   FormFactor.Width = 1440
   FormFactor.Height = 900
   FormFactor.Devices = [Desktop]
+  OnShow = FormShow
   DesignerMasterStyle = 0
   object Header: TToolBar
     Size.Width = 384.000000000000000000
@@ -20,7 +21,20 @@ object FrmMain: TFrmMain
       Size.PlatformDefault = False
       StyleLookup = 'toollabel'
       TextSettings.HorzAlign = Center
-      Text = 'Title'
+      Text = 'Cosmos'
+    end
+    object SpeedButton1: TSpeedButton
+      Align = FitLeft
+      Margins.Left = 2.000000000000000000
+      Margins.Top = 5.000000000000000000
+      Margins.Right = 5.000000000000000000
+      Margins.Bottom = 5.000000000000000000
+      Position.X = 2.000000000000000000
+      Position.Y = 5.000000000000000000
+      Size.Width = 43.795928955078130000
+      Size.Height = 38.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = 'drawertoolbutton'
     end
   end
   object Footer: TToolBar
@@ -31,5 +45,106 @@ object FrmMain: TFrmMain
     Size.PlatformDefault = False
     StyleLookup = 'bottomtoolbar'
     TabOrder = 1
+  end
+  object TabControl1: TTabControl
+    Align = Client
+    Size.Width = 384.000000000000000000
+    Size.Height = 471.000000000000000000
+    Size.PlatformDefault = False
+    TabIndex = 1
+    TabOrder = 2
+    TabPosition = PlatformDefault
+    Sizes = (
+      384s
+      445s
+      384s
+      445s)
+    object TabItem1: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = False
+      Size.Width = 69.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'TabItem1'
+      ExplicitSize.cx = 69.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      object TrvRegions: TTreeView
+        Align = Client
+        Margins.Left = 3.000000000000000000
+        Margins.Right = 3.000000000000000000
+        Size.Width = 378.000000000000000000
+        Size.Height = 413.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 0
+        OnDblClick = TrvRegionsDblClick
+        Viewport.Width = 374.000000000000000000
+        Viewport.Height = 409.000000000000000000
+      end
+      object Edit1: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Top
+        TabOrder = 1
+        Position.X = 3.000000000000000000
+        Position.Y = 5.000000000000000000
+        Margins.Left = 3.000000000000000000
+        Margins.Top = 5.000000000000000000
+        Margins.Right = 3.000000000000000000
+        Margins.Bottom = 5.000000000000000000
+        Size.Width = 378.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TextPrompt = 'Pesquisar...'
+      end
+    end
+    object TabItem2: TTabItem
+      CustomIcon = <
+        item
+        end>
+      IsSelected = True
+      Size.Width = 69.000000000000000000
+      Size.Height = 26.000000000000000000
+      Size.PlatformDefault = False
+      StyleLookup = ''
+      TabOrder = 0
+      Text = 'TabItem2'
+      ExplicitSize.cx = 69.000000000000000000
+      ExplicitSize.cy = 26.000000000000000000
+      object LstboxRegions: TListBox
+        Align = Client
+        Size.Width = 384.000000000000000000
+        Size.Height = 445.000000000000000000
+        Size.PlatformDefault = False
+        StyleLookup = 'listboxstyle'
+        TabOrder = 2
+        DisableFocusEffect = True
+        ItemHeight = 30.000000000000000000
+        DefaultItemStyles.ItemStyle = ''
+        DefaultItemStyles.GroupHeaderStyle = ''
+        DefaultItemStyles.GroupFooterStyle = ''
+        Viewport.Width = 380.000000000000000000
+        Viewport.Height = 419.000000000000000000
+        object ListBoxGroupFooter1: TListBoxGroupFooter
+          Position.Y = 90.000000000000000000
+          Size.Width = 380.000000000000000000
+          Size.Height = 30.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          Text = 'ListBoxGroupFooter1'
+        end
+        object SearchBox1: TSearchBox
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          Align = Top
+          TabOrder = 0
+          Size.Width = 380.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextPrompt = 'Pesquisar regi'#245'es...'
+        end
+      end
+    end
   end
 end
