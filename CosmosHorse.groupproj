@@ -6,10 +6,13 @@
         <Projects Include="Frontend\cosmos.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="Backend\alunosConsole.dproj">
+        <Projects Include="Backend\security\cosmosec.dproj">
             <Dependencies/>
         </Projects>
-        <Projects Include="Backend\focosConsole.dproj">
+        <Projects Include="Backend\focos\focosConsole.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Backend\secretarias\alunosConsole.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -29,32 +32,93 @@
     <Target Name="cosmos:Make">
         <MSBuild Projects="Frontend\cosmos.dproj" Targets="Make"/>
     </Target>
-    <Target Name="alunosConsole">
-        <MSBuild Projects="Backend\alunosConsole.dproj"/>
+    <Target Name="cosmosec">
+        <MSBuild Projects="Backend\security\cosmosec.dproj"/>
     </Target>
-    <Target Name="alunosConsole:Clean">
-        <MSBuild Projects="Backend\alunosConsole.dproj" Targets="Clean"/>
+    <Target Name="cosmosec:Clean">
+        <MSBuild Projects="Backend\security\cosmosec.dproj" Targets="Clean"/>
     </Target>
-    <Target Name="alunosConsole:Make">
-        <MSBuild Projects="Backend\alunosConsole.dproj" Targets="Make"/>
+    <Target Name="cosmosec:Make">
+        <MSBuild Projects="Backend\security\cosmosec.dproj" Targets="Make"/>
     </Target>
     <Target Name="focosConsole">
-        <MSBuild Projects="Backend\focosConsole.dproj"/>
+        <MSBuild Projects="Backend\focos\focosConsole.dproj"/>
     </Target>
     <Target Name="focosConsole:Clean">
-        <MSBuild Projects="Backend\focosConsole.dproj" Targets="Clean"/>
+        <MSBuild Projects="Backend\focos\focosConsole.dproj" Targets="Clean"/>
     </Target>
     <Target Name="focosConsole:Make">
-        <MSBuild Projects="Backend\focosConsole.dproj" Targets="Make"/>
+        <MSBuild Projects="Backend\focos\focosConsole.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="alunosConsole">
+        <MSBuild Projects="Backend\secretarias\alunosConsole.dproj"/>
+    </Target>
+    <Target Name="alunosConsole:Clean">
+        <MSBuild Projects="Backend\secretarias\alunosConsole.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="alunosConsole:Make">
+        <MSBuild Projects="Backend\secretarias\alunosConsole.dproj" Targets="Make"/>
     </Target>
     <Target Name="Build">
-        <CallTarget Targets="cosmos;alunosConsole;focosConsole"/>
+        <CallTarget Targets="cosmos;cosmosec;focosConsole;alunosConsole"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="cosmos:Clean;alunosConsole:Clean;focosConsole:Clean"/>
+        <CallTarget Targets="cosmos:Clean;cosmosec:Clean;focosConsole:Clean;alunosConsole:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="cosmos:Make;alunosConsole:Make;focosConsole:Make"/>
+        <CallTarget Targets="cosmos:Make;cosmosec:Make;focosConsole:Make;alunosConsole:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+    <ItemGroup Condition="'$(BuildGroup)'=='Backends- debug'">
+        <BuildGroupProject Include="Frontend\cosmos.dproj">
+            <ProjectGuid>{A1E00957-BA39-49E3-9093-73504C30DB51}</ProjectGuid>
+            <Configurations>Debug</Configurations>
+            <Platforms>Win64</Platforms>
+            <Enabled>False</Enabled>
+        </BuildGroupProject>
+        <BuildGroupProject Include="Backend\focos\focosConsole.dproj">
+            <ProjectGuid>{AB32BB1F-6AC2-4B1B-97CC-A40D5B97E40B}</ProjectGuid>
+            <Configurations>Debug</Configurations>
+            <Platforms>Win64</Platforms>
+            <Enabled>False</Enabled>
+        </BuildGroupProject>
+        <BuildGroupProject Include="Backend\secretarias\alunosConsole.dproj">
+            <ProjectGuid>{822CF528-F7A8-45BA-BEEB-A953506A05BD}</ProjectGuid>
+            <Configurations>Debug</Configurations>
+            <Platforms>Win64</Platforms>
+            <Enabled>False</Enabled>
+        </BuildGroupProject>
+        <BuildGroupProject Include="Backend\security\cosmosec.dproj">
+            <ProjectGuid>{1A5AA2F8-2DBA-4396-9047-A2B40BE8AB05}</ProjectGuid>
+            <Configurations>Debug</Configurations>
+            <Platforms>Win32</Platforms>
+            <Enabled>False</Enabled>
+        </BuildGroupProject>
+    </ItemGroup>
+    <ItemGroup Condition="'$(BuildGroup)'=='Backends - release'">
+        <BuildGroupProject Include="Frontend\cosmos.dproj">
+            <ProjectGuid>{A1E00957-BA39-49E3-9093-73504C30DB51}</ProjectGuid>
+            <Configurations>Debug</Configurations>
+            <Platforms>Win64</Platforms>
+            <Enabled>False</Enabled>
+        </BuildGroupProject>
+        <BuildGroupProject Include="Backend\focos\focosConsole.dproj">
+            <ProjectGuid>{AB32BB1F-6AC2-4B1B-97CC-A40D5B97E40B}</ProjectGuid>
+            <Configurations>Debug</Configurations>
+            <Platforms>Win64</Platforms>
+            <Enabled>False</Enabled>
+        </BuildGroupProject>
+        <BuildGroupProject Include="Backend\secretarias\alunosConsole.dproj">
+            <ProjectGuid>{822CF528-F7A8-45BA-BEEB-A953506A05BD}</ProjectGuid>
+            <Configurations>Debug</Configurations>
+            <Platforms>Win64</Platforms>
+            <Enabled>False</Enabled>
+        </BuildGroupProject>
+        <BuildGroupProject Include="Backend\security\cosmosec.dproj">
+            <ProjectGuid>{1A5AA2F8-2DBA-4396-9047-A2B40BE8AB05}</ProjectGuid>
+            <Configurations>Debug</Configurations>
+            <Platforms>Win32</Platforms>
+            <Enabled>False</Enabled>
+        </BuildGroupProject>
+    </ItemGroup>
 </Project>
