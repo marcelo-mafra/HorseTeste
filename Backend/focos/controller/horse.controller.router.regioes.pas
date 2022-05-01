@@ -8,7 +8,8 @@ uses
  {$IF DEFINED(FOCOS_SVC)}
  horse.model.regioes,
  {$ENDIF}
- horse.model.exceptions, horse.controller.router.exceptions;
+ horse.model.exceptions, horse.controller.router.exceptions,
+  horse.controller.router.focos.consts;
 
 type
  TRegioesEndpoints = class
@@ -117,7 +118,6 @@ begin
 
   TModelRegioes.New(Params).NewRegion(Request.Body<TJsonObject>);
   Response.Send(string.Empty).Status(THTTPStatus.Created);
-
  except
   on E: ECosmosError do
    begin
@@ -160,12 +160,12 @@ begin
 
   {$IF DEFINED(FOCOS_SVC)}
   //Endpoints do domínio REGIOES
-  THorse.Routes.RegisterRoute(mtGet, TEndPointsRegions.Regions, GetRegionsEndpoint);
-  THorse.Routes.RegisterRoute(mtGet, TEndPointsRegions.RegionsMember, GetRegionsMembersEndpoint);
-  THorse.Routes.RegisterRoute(mtGet, TEndPointsRegions.Region, GetRegionEndpoint);
-  THorse.Routes.RegisterRoute(mtPost, TEndPointsRegions.Regions, PostNewRegion);
-  THorse.Routes.RegisterRoute(mtPut,  TEndPointsRegions.Region, PutRegion);
-  THorse.Routes.RegisterRoute(mtDelete,  TEndPointsRegions.Region, DeleteRegion);
+  THorse.Routes.RegisterRoute(mtGet, TRegionsURI.Regions, GetRegionsEndpoint);
+  THorse.Routes.RegisterRoute(mtGet, TRegionsURI.RegionsMember, GetRegionsMembersEndpoint);
+  THorse.Routes.RegisterRoute(mtGet, TRegionsURI.Region, GetRegionEndpoint);
+  THorse.Routes.RegisterRoute(mtPost, TRegionsURI.Regions, PostNewRegion);
+  THorse.Routes.RegisterRoute(mtPut,  TRegionsURI.Region, PutRegion);
+  THorse.Routes.RegisterRoute(mtDelete,  TRegionsURI.Region, DeleteRegion);
   {$ENDIF}
 end;
 

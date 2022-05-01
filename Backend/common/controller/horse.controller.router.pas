@@ -15,6 +15,10 @@ uses
  horse.controller.router.focos,
  horse.controller.router.regioes,
  {$ENDIF}
+ {$IFDEF SECURITY_SVC}
+ horse.controller.router.usuarios,
+ {$ENDIF}
+
  horse.controller.router.consts;
 
 type
@@ -34,12 +38,12 @@ type
       function RegisterEndpoints: IHorseRouter;
       function GetServiceParams: TBackendParams;
       function HorseVersion: string;
+      procedure Listen;
 
     public
       destructor Destroy; override;
       class function New: IHorseRouter;
 
-      property ParamsFile: string read GetParamsFile;
       property ServiceParams: TBackendParams read GetServiceParams;
 
   end;
@@ -51,21 +55,17 @@ implementation
 constructor THorseRouter.Create;
 begin
  inherited;
-
-// {$IFDEF ALUNOS_SVC}
-//    FFileName := TServiceParamsFiles.Alunos;
-// {$ELSEIF FOCOS_SVC}
-//    FFileName := TServiceParamsFiles.Focos;
-// {$IFEND}
-
  {$IFDEF ALUNOS_SVC}
     FFileName := TServiceParamsFiles.Alunos;
  {$IFEND}
  {$IFDEF FOCOS_SVC}
     FFileName := TServiceParamsFiles.Focos;
  {$IFEND}
+ {$IFDEF SECURITY_SVC}
+    FFileName := TServiceParamsFiles.Security;
+ {$IFEND}
 
- THorseParams.New(self.ParamsFile).ReadParams(FServiceParams);
+ THorseParams.New(FFileName).ReadParams(FServiceParams);
 end;
 
 destructor THorseRouter.Destroy;
@@ -101,8 +101,11 @@ begin
  THorse
     .Use(Jhonson)
     .AddCallback(ACallback);
+end;
 
- THorse.Listen(ServiceParams.Porta);
+procedure THorseRouter.Listen;
+begin
+THorse.Listen(ServiceParams.Porta);
 end;
 
 function THorseRouter.InitializeService: IHorseRouter;
@@ -110,8 +113,6 @@ begin
  Result := self;
  THorse
     .Use(Jhonson);
-
- THorse.Listen(ServiceParams.Porta);
 end;
 
 function THorseRouter.RegisterEndpoints: IHorseRouter;
@@ -130,7 +131,11 @@ begin
     TRegioesEndpoints.Params := self.FServiceParams;
     TRegioesEndpoints.RegistrarEndpoints;
  {$ENDIF}
+  {$IFDEF SECURITY_SVC}
+    //Endpoints do domínio SECURITY
+    TUsuariosEndpoints.Params := self.FServiceParams;
+    TUsuariosEndpoints.RegistrarEndpoints;
+ {$ENDIF}
 end;
-
 
 end.

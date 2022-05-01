@@ -14,6 +14,8 @@ type
     function RegisterEndpoints: IHorseRouter;
     function HorseVersion: string;
     function GetServiceParams: TBackendParams;
+    procedure Listen;
+
     property ServiceParams:TBackendParams read GetServiceParams;
   end;
 
