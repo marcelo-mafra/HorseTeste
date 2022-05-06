@@ -13,9 +13,16 @@ type
  TUsuariosEndpoints = class
   public
    class var Params: TBackendParams;
+
    class procedure GetUsuarioEndpoint(Request: THorseRequest; Response: THorseResponse;
       Next: TProc);
    class procedure GetUsuariosEndpoint(Request: THorseRequest; Response: THorseResponse;
+      Next: TProc);
+   class procedure PostUsuarioEndpoint(Request: THorseRequest; Response: THorseResponse;
+      Next: TProc);
+   class procedure PutUsuarioEndpoint(Request: THorseRequest; Response: THorseResponse;
+      Next: TProc);
+   class procedure GetAutenticarEndpoint(Request: THorseRequest; Response: THorseResponse;
       Next: TProc);
 
    class procedure RegistrarEndpoints;
@@ -26,6 +33,12 @@ implementation
 
 { TUsuariosEndpoints }
 
+class procedure TUsuariosEndpoints.GetAutenticarEndpoint(
+  Request: THorseRequest; Response: THorseResponse; Next: TProc);
+begin
+
+end;
+
 class procedure TUsuariosEndpoints.GetUsuarioEndpoint(Request: THorseRequest;
   Response: THorseResponse; Next: TProc);
 begin
@@ -34,13 +47,7 @@ begin
             .ListMember(Request.Params.Field('id').AsInteger));
   except
   on E: ECosmosError do
-   begin
     Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.InternalServerError);
-   end;
-  on E: Exception do
-   begin
-    Response.Send(E.Message).Status(THTTPStatus.InternalServerError);
-   end;
   end;
 end;
 
@@ -51,14 +58,20 @@ begin
    Response.Send<TJsonArray>(TModelUsuarios.New(Params).ListMembers);
   except
   on E: ECosmosError do
-   begin
     Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.InternalServerError);
-   end;
-  on E: Exception do
-   begin
-    Response.Send(E.Message).Status(THTTPStatus.InternalServerError);
-   end;
   end;
+end;
+
+class procedure TUsuariosEndpoints.PostUsuarioEndpoint(Request: THorseRequest;
+  Response: THorseResponse; Next: TProc);
+begin
+
+end;
+
+class procedure TUsuariosEndpoints.PutUsuarioEndpoint(Request: THorseRequest;
+  Response: THorseResponse; Next: TProc);
+begin
+
 end;
 
 class procedure TUsuariosEndpoints.RegistrarEndpoints;
@@ -67,8 +80,11 @@ begin
     Exit;
 
   //Endpoints do domínio SECURITY
+  THorse.Routes.RegisterRoute(mtGet, TUsuariosURI.Autenticar, GetAutenticarEndpoint);
   THorse.Routes.RegisterRoute(mtGet, TUsuariosURI.Usuarios, GetUsuariosEndpoint);
   THorse.Routes.RegisterRoute(mtGet, TUsuariosURI.Usuario, GetUsuarioEndpoint);
+  THorse.Routes.RegisterRoute(mtPost,TUsuariosURI.Usuarios, PostUsuarioEndpoint);
+  THorse.Routes.RegisterRoute(mtPut, TUsuariosURI.Usuario, PutUsuarioEndpoint);
 end;
 
 end.

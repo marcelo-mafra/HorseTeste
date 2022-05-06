@@ -3,7 +3,7 @@ unit horse.model.customobj;
 interface
 
 uses
-  System.Classes, System.JSON, System.JSON.Converters,
+  System.Classes, System.SysUtils, System.JSON, System.JSON.Converters,
   horse.service.params.types;
 
 type
@@ -16,7 +16,6 @@ type
       destructor Destroy; override;
 
       property Params: TBackendParams read FParams;
-
   end;
 
 implementation

@@ -34,7 +34,7 @@ type
     protected
       constructor Create;
       function InitializeService: IHorseRouter; overload;
-      function InitializeService(ACallback: THorseCAllback): IHorseRouter; overload;
+      function InitializeService(ACallback: THorseCallback): IHorseRouter; overload;
       function RegisterEndpoints: IHorseRouter;
       function GetServiceParams: TBackendParams;
       function HorseVersion: string;
@@ -95,12 +95,12 @@ begin
 end;
 
 function THorseRouter.InitializeService(
-  ACallback: THorseCAllback): IHorseRouter;
+  ACallback: THorseCallback): IHorseRouter;
 begin
  Result := self;
  THorse
-    .Use(Jhonson)
-    .AddCallback(ACallback);
+    .AddCallback(ACallback)
+    .Use(Jhonson);
 end;
 
 procedure THorseRouter.Listen;

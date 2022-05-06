@@ -43,7 +43,14 @@ end;
 
 function TModelUsuarios.ListMembers: TJsonArray;
 begin
- Result := TDAOUsuarios.New(Params).ListAll;
+ try
+  Result := TDAOUsuarios.New(Params).ListAll;
+ except
+ on E: ECosmosError do
+     raise;
+ on E: Exception do
+     E.RaiseOuterException(ECosmosInternalError.Create);
+ end;
 end;
 
 function TModelUsuarios.ListMember(const id: integer): TJsonObject;
@@ -51,10 +58,10 @@ begin
  try
   Result := TDAOUsuarios.New(Params).ListMember(id);
  except
+ on E: ECosmosError do
+     raise;
  on E: Exception do
-  begin
-   E.RaiseOuterException(ECosmosInternalError.Create);
-  end;
+     E.RaiseOuterException(ECosmosInternalError.Create);
  end;
 end;
 

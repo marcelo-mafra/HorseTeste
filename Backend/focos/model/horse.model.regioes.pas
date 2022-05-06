@@ -5,7 +5,8 @@ interface
 uses
   System.Classes, System.Generics.Collections, System.JSON,
   horse.service.params.types, horse.model.customobj,
-  horse.model.regioes.interfaces, horse.dao.regioes.datasets;
+  horse.model.regioes.interfaces, horse.dao.regioes.datasets,
+  horse.model.exceptions, System.SysUtils;
 
 type
   TModelRegioes = class(TModelCustomObject, IModelRegioes)
@@ -47,9 +48,12 @@ end;
 procedure TModelRegioes.NewRegion(obj: TJsonObject);
 begin
  try
-  TDAORegioes.New(Params).NewRegion(obj);
+   TDAORegioes.New(Params).NewRegion(obj);
  except
-  raise;
+   on E: ECosmosError do
+       raise;
+   on E: Exception do
+       E.RaiseOuterException(ECosmosInternalError.Create);
  end;
 end;
 
@@ -58,7 +62,10 @@ begin
  try
   Result := TDAORegioes.New(Params).UpdateRegion(obj);
  except
-  raise;
+   on E: ECosmosError do
+       raise;
+   on E: Exception do
+       E.RaiseOuterException(ECosmosInternalError.Create);
  end;
 end;
 
@@ -67,7 +74,10 @@ begin
  try
   Result := TDAORegioes.New(Params).DeleteRegion(id);
  except
-  raise;
+   on E: ECosmosError do
+       raise;
+   on E: Exception do
+       E.RaiseOuterException(ECosmosInternalError.Create);
  end;
 end;
 
@@ -76,18 +86,35 @@ begin
  try
   Result := TDAORegioes.New(Params).ListMember(id);
  except
-  raise;
+   on E: ECosmosError do
+       raise;
+   on E: Exception do
+       E.RaiseOuterException(ECosmosInternalError.Create);
  end;
 end;
 
 function TModelRegioes.ListRegions: TJsonArray;
 begin
- Result := TDAORegioes.New(Params).ListRegions;
+ try
+  Result := TDAORegioes.New(Params).ListRegions;
+ except
+   on E: ECosmosError do
+       raise;
+   on E: Exception do
+       E.RaiseOuterException(ECosmosInternalError.Create);
+ end;
 end;
 
 function TModelRegioes.ListRegionsParent(const id: integer): TJsonArray;
 begin
- Result := TDAORegioes.New(Params).ListRegionsParent(id);
+ try
+  Result := TDAORegioes.New(Params).ListRegionsParent(id);
+ except
+   on E: ECosmosError do
+       raise;
+   on E: Exception do
+       E.RaiseOuterException(ECosmosInternalError.Create);
+ end;
 end;
 
 end.

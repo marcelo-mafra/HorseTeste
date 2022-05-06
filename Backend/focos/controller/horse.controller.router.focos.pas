@@ -44,17 +44,11 @@ class procedure TFocosEndpoints.GetFocoEndpoint(Request: THorseRequest;
   Response: THorseResponse; Next: TProc);
 begin
   try
-   Response.Send<TJsonObject>(TModelFocos.New(self.Params).ListMember
-        (Request.Params.Field('id').AsInteger));
+   Response.Send<TJsonObject>(TModelFocos.New(self.Params)
+           .ListMember(Request.Params.Field('id').AsInteger));
   except
   on E: ECosmosError do
-   begin
     Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.InternalServerError);
-   end;
-  on E: Exception do
-   begin
-    Response.Send(E.Message).Status(THTTPStatus.InternalServerError);
-   end;
   end;
 end;
 
@@ -65,13 +59,7 @@ begin
     Response.Send<TJsonArray>(TModelFocos.New(Params).ListAll);
   except
   on E: ECosmosError do
-   begin
     Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.InternalServerError);
-   end;
-  on E: Exception do
-   begin
-    Response.Send(E.Message).Status(THTTPStatus.InternalServerError);
-   end;
   end;
 end;
 
@@ -79,17 +67,11 @@ class procedure TFocosEndpoints.GetFocosParentEndpoint(
   Request: THorseRequest; Response: THorseResponse; Next: TProc);
 begin
   try
-    Response.Send<TJsonArray>(TModelFocos.New(Params).ListFocosParent
-        (Request.Params.Field('id').AsInteger));
+    Response.Send<TJsonArray>(TModelFocos.New(Params)
+            .ListFocosParent(Request.Params.Field('id').AsInteger));
   except
   on E: ECosmosError do
-   begin
     Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.InternalServerError);
-   end;
-  on E: Exception do
-   begin
-    Response.Send(E.Message).Status(THTTPStatus.InternalServerError);
-   end;
   end;
 end;
 
@@ -97,16 +79,11 @@ class procedure TFocosEndpoints.GetFocosRegionEndpoint(
   Request: THorseRequest; Response: THorseResponse; Next: TProc);
 begin
   try
-    Response.Send<TJsonArray>(TModelFocos.New(Params).ListFocosRegion(Request.Params.Field('id').AsInteger));
+    Response.Send<TJsonArray>(TModelFocos.New(Params)
+            .ListFocosRegion(Request.Params.Field('id').AsInteger));
   except
   on E: ECosmosError do
-   begin
     Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.InternalServerError);
-   end;
-  on E: Exception do
-   begin
-    Response.Send(E.Message).Status(THTTPStatus.InternalServerError);
-   end;
   end;
 end;
 
@@ -114,17 +91,11 @@ class procedure TFocosEndpoints.GetFocosStatusEndpoint(Request: THorseRequest;
   Response: THorseResponse; Next: TProc);
 begin
   try
-    Response.Send<TJsonArray>(TModelFocos.New(Params).ListFocosStatus
-      (Request.Params.Field('status').AsBoolean));
+    Response.Send<TJsonArray>(TModelFocos.New(Params)
+            .ListFocosStatus(Request.Params.Field('status').AsBoolean));
   except
   on E: ECosmosError do
-   begin
     Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.InternalServerError);
-   end;
-  on E: Exception do
-   begin
-    Response.Send(E.Message).Status(THTTPStatus.InternalServerError);
-   end;
   end;
 end;
 
@@ -139,13 +110,7 @@ begin
       ));
   except
   on E: ECosmosError do
-   begin
     Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.InternalServerError);
-   end;
-  on E: Exception do
-   begin
-    Response.Send(E.Message).Status(THTTPStatus.InternalServerError);
-   end;
   end;
 end;
 
@@ -156,13 +121,7 @@ begin
     Response.Send<TJsonObject>(TModelFocos.New(self.Params).DesativarFoco(Request.Params.Field('id').AsInteger));
   except
   on E: ECosmosError do
-   begin
     Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.InternalServerError);
-   end;
-  on E: Exception do
-   begin
-    Response.Send(E.Message).Status(THTTPStatus.InternalServerError);
-   end;
   end;
 end;
 
@@ -170,16 +129,11 @@ class procedure TFocosEndpoints.PutReativarFocoEndpoint(Request: THorseRequest;
   Response: THorseResponse; Next: TProc);
 begin
   try
-   Response.Send<TJsonObject>(TModelFocos.New(self.Params).ReativarFoco(Request.Params.Field('id').AsInteger));
+   Response.Send<TJsonObject>(TModelFocos.New(self.Params)
+           .ReativarFoco(Request.Params.Field('id').AsInteger));
   except
   on E: ECosmosError do
-   begin
     Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.InternalServerError);
-   end;
-  on E: Exception do
-   begin
-    Response.Send(E.Message).Status(THTTPStatus.InternalServerError);
-   end;
   end;
 end;
 

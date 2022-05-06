@@ -38,7 +38,8 @@ class procedure TAlunosEndpoints.GetAlunoEndpoint(Request: THorseRequest;
   Response: THorseResponse; Next: TProc);
 begin
   try
-   Response.Send<TJsonObject>(TModelAlunos.New(self.Params).ListMember(Request.Params.Field('id').AsInteger));
+   Response.Send<TJsonObject>(TModelAlunos.New(self.Params)
+           .ListMember(Request.Params.Field('id').AsInteger));
   except
   on E: ECosmosError do
    begin
@@ -55,7 +56,8 @@ class procedure TAlunosEndpoints.GetAlunoMatriculaEndpoint(
   Request: THorseRequest; Response: THorseResponse; Next: TProc);
 begin
   try
-   Response.Send<TJsonObject>(TModelAlunos.New(self.Params).ListMemberMatricula(Request.Params.Field('matricula').AsString));
+   Response.Send<TJsonObject>(TModelAlunos.New(self.Params)
+           .ListMemberMatricula(Request.Params.Field('matricula').AsString));
   except
   on E: ECosmosError do
    begin
@@ -89,7 +91,8 @@ class procedure TAlunosEndpoints.GetAlunosFocoEndpoint(
   Request: THorseRequest; Response: THorseResponse; Next: TProc);
 begin
   try
-   Response.Send<TJsonArray>(TModelAlunos.New(self.Params).ListByFoco(Request.Params.Field('id').AsInteger));
+   Response.Send<TJsonArray>(TModelAlunos.New(self.Params)
+           .ListByFoco(Request.Params.Field('id').AsInteger));
   except
   on E: ECosmosError do
    begin
@@ -106,8 +109,9 @@ class procedure TAlunosEndpoints.GetAlunosGroupEndpoint(
   Request: THorseRequest; Response: THorseResponse; Next: TProc);
 begin
   try
-   Response.Send<TJsonArray>(TModelAlunos.New(self.Params).ListByGroup(Request.Params.Field('focoid').AsInteger,
-      Request.Params.Field('groupid').AsString));
+   Response.Send<TJsonArray>(TModelAlunos.New(self.Params)
+           .ListByGroup(Request.Params.Field('focoid').AsInteger,
+                        Request.Params.Field('groupid').AsString));
   except
   on E: ECosmosError do
    begin

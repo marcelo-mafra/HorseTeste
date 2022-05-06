@@ -60,13 +60,13 @@ begin
   writeln(Format(TBackendInfo.Listenning, [Params.ServiceName, Params.Host + ':' + Params.Porta.ToString]));
   writeln(Format(TBackendInfo.ParamsInfo, [Params.ServiceName, Params.ParamsFile]));
   SvcRouter.RegisterEndpoints
-    .InitializeService
-    (
-      procedure(AReq: THorseRequest; ARes: THorseResponse; ANext: TNextProc)
-      begin
-        Writeln(AReq.Body);
-      end
-    ).Listen;
+           .InitializeService
+           (
+              procedure(AReq: THorseRequest; ARes: THorseResponse; ANext: TNextProc)
+              begin
+                Writeln(AReq.Body);
+              end
+            ).Listen;
 end;
 
 begin

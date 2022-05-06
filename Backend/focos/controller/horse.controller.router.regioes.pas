@@ -42,18 +42,12 @@ class procedure TRegioesEndpoints.DeleteRegion(Request: THorseRequest;
 begin
  try
    Response.Send(TModelRegioes.New(Params)
-      .DeleteRegion(Request.Params.Field('id').AsInteger).ToString)
-      .Status(THTTPStatus.NoContent);
+           .DeleteRegion(Request.Params.Field('id').AsInteger).ToString)
+           .Status(THTTPStatus.NoContent);
 
  except
   on E: ECosmosError do
-   begin
     Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.NotAcceptable);
-   end;
-  on E: Exception do
-   begin
-    Response.Send(E.Message).Status(THTTPStatus.InternalServerError);
-   end;
  end;
 end;
 
@@ -63,14 +57,8 @@ begin
   try
    Response.Send<TJsonArray>(TModelRegioes.New(Params).ListRegions);
   except
-  on E: ECosmosError do
-   begin
+   on E: ECosmosError do
     Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.InternalServerError);
-   end;
-  on E: Exception do
-   begin
-    Response.Send(E.Message).Status(THTTPStatus.InternalServerError);
-   end;
   end;
 end;
 
@@ -82,13 +70,7 @@ begin
            .ListMember(Request.Params.Field('id').AsInteger));
   except
   on E: ECosmosError do
-   begin
     Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.InternalServerError);
-   end;
-  on E: Exception do
-   begin
-    Response.Send(E.Message).Status(THTTPStatus.InternalServerError);
-   end;
   end;
 end;
 
@@ -99,13 +81,7 @@ begin
    Response.Send<TJsonArray>(TModelRegioes.New(Params).ListRegionsParent(Request.Params.Field('id').AsInteger));
   except
   on E: ECosmosError do
-   begin
     Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.InternalServerError);
-   end;
-  on E: Exception do
-   begin
-    Response.Send(E.Message).Status(THTTPStatus.InternalServerError);
-   end;
   end;
 end;
 
@@ -120,13 +96,7 @@ begin
   Response.Send(string.Empty).Status(THTTPStatus.Created);
  except
   on E: ECosmosError do
-   begin
     Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.InternalServerError);
-   end;
-  on E: Exception do
-   begin
-    Response.Send(E.Message).Status(THTTPStatus.InternalServerError);
-   end;
  end;
 end;
 
@@ -138,18 +108,12 @@ begin
     raise EInvalidJsonContentType.Create;
 
   Response.Send<TJsonObject>(TModelRegioes.New(Params)
-    .UpdateRegion(Request.Body<TJsonObject>))
-    .Status(THTTPStatus.Accepted);
+          .UpdateRegion(Request.Body<TJsonObject>))
+          .Status(THTTPStatus.Accepted);
 
  except
   on E: ECosmosError do
-   begin
-    Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.NotAcceptable);
-   end;
-  on E: Exception do
-   begin
-    Response.Send(E.Message).Status(THTTPStatus.InternalServerError);
-   end;
+   Response.Send<TJsonObject>(E.AsJson).Status(THTTPStatus.NotAcceptable);
  end;
 end;
 
@@ -160,12 +124,12 @@ begin
 
   {$IF DEFINED(FOCOS_SVC)}
   //Endpoints do domínio REGIOES
-  THorse.Routes.RegisterRoute(mtGet, TRegionsURI.Regions, GetRegionsEndpoint);
-  THorse.Routes.RegisterRoute(mtGet, TRegionsURI.RegionsMember, GetRegionsMembersEndpoint);
-  THorse.Routes.RegisterRoute(mtGet, TRegionsURI.Region, GetRegionEndpoint);
-  THorse.Routes.RegisterRoute(mtPost, TRegionsURI.Regions, PostNewRegion);
-  THorse.Routes.RegisterRoute(mtPut,  TRegionsURI.Region, PutRegion);
-  THorse.Routes.RegisterRoute(mtDelete,  TRegionsURI.Region, DeleteRegion);
+  THorse.Routes.RegisterRoute(mtGet,    TRegionsURI.Regions, GetRegionsEndpoint);
+  THorse.Routes.RegisterRoute(mtGet,    TRegionsURI.RegionsMember, GetRegionsMembersEndpoint);
+  THorse.Routes.RegisterRoute(mtGet,    TRegionsURI.Region, GetRegionEndpoint);
+  THorse.Routes.RegisterRoute(mtPost,   TRegionsURI.Regions, PostNewRegion);
+  THorse.Routes.RegisterRoute(mtPut,    TRegionsURI.Region, PutRegion);
+  THorse.Routes.RegisterRoute(mtDelete, TRegionsURI.Region, DeleteRegion);
   {$ENDIF}
 end;
 

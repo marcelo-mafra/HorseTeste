@@ -10,6 +10,7 @@ type
    const
      Usuarios      = '/usuarios';
      Usuario       = '/usuarios/:id';
+     Autenticar    = '/usuarios/autenticar';
  end;
 
 implementation
